@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Rireki</string>
+
+    <!--  Authentifizierung  -->
+    <string name="login_header_text">Bei Rireki einloggen</string>
+    <string name="register_header_text">Auf Rireki registrieren</string>
+    <string name="email_label">Email-Adresse</string>
+    <string name="password_label">Passwort</string>
+    <string name="login_text">Einloggen</string>
+    <string name="register_text">Registrieren</string>
+    <string name="info_login_text">Bereits registriert?</string>
+    <string name="info_register_text">Noch keinen Account?</string>
 </resources>
