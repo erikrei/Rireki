@@ -9,4 +9,13 @@
     <dimen name="auth_social_padding">4.dp</dimen>
     <dimen name="auth_footer_padding">12.dp</dimen>
     <dimen name="auth_info_padding">2.dp</dimen>
+
+    <!--  Startseite  -->
+    <dimen name="topbar_title_icon_size">48.dp</dimen>
+    <dimen name="topbar_title_space">8.dp</dimen>
+    <dimen name="profile_list_outer_vertical_padding">8.dp</dimen>
+    <dimen name="profile_list_outer_horizontal_padding">16.dp</dimen>
+    <dimen name="profile_list_inner_padding">16.dp</dimen>
+    <dimen name="profile_list_created_padding">8.dp</dimen>
+    <dimen name="profile_list_border_shape_size">8.dp</dimen>
 </resources>

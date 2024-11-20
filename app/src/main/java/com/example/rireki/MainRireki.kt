@@ -6,7 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rireki.data.objects.Authentication
+import com.example.rireki.data.objects.Home
 import com.example.rireki.ui.screens.AuthenticationScreen
+import com.example.rireki.ui.screens.HomeScreen
 
 @Composable
 fun MainRireki(
@@ -14,10 +16,13 @@ fun MainRireki(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Authentication
+        startDestination = Home
     ) {
         composable<Authentication> {
             AuthenticationScreen()
+        }
+        composable<Home> {
+            HomeScreen()
         }
     }
 }
