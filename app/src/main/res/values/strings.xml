@@ -12,8 +12,8 @@
     <string name="info_register_text">Noch keinen Account?</string>
 
     <!--  Neue Liste Dialog  -->
-    <string name="dialog_title">Neue Liste hinzufügen</string>
-    <string name="dialog_field_label">Name</string>
-    <string name="dialog_cancel_button">Abbruch</string>
+    <string name="dialog_title">Liste hinzufügen</string>
+    <string name="dialog_field_label">Listenname eingeben</string>
+    <string name="dialog_cancel_button">Abbrechen</string>
     <string name="dialog_submit_button">Erstellen</string>
 </resources>
