@@ -18,4 +18,8 @@
     <dimen name="profile_list_inner_padding">16.dp</dimen>
     <dimen name="profile_list_created_padding">8.dp</dimen>
     <dimen name="profile_list_border_shape_size">8.dp</dimen>
+
+    <!--  Neue Liste Dialog  -->
+    <dimen name="dialog_card_inner_padding">16.dp</dimen>
+    <dimen name="dialog_card_inner_spacing">16.dp</dimen>
 </resources>

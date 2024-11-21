@@ -72,17 +72,9 @@ fun HomeTopBar(
 
 @Composable
 fun HomeFloatingActionButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-//    FloatingActionButton(
-//        onClick = { /*TODO*/ },
-//        modifier = modifier
-//    ) {
-//        Icon(
-//            painter = painterResource(id = R.drawable.add_24),
-//            contentDescription = null
-//        )
-//    }
     ExtendedFloatingActionButton(
         text = { 
                Text(text = "Liste hinzufügen")
@@ -93,7 +85,7 @@ fun HomeFloatingActionButton(
                 contentDescription = null
             )
         },
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         modifier = modifier
     )
 }
