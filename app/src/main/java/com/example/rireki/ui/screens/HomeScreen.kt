@@ -51,8 +51,9 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                vertical = dimensionResource(id = R.dimen.profile_list_outer_vertical_padding),
-                                horizontal = dimensionResource(id = R.dimen.profile_list_outer_horizontal_padding)
+                                start = dimensionResource(id = R.dimen.profile_list_outer_horizontal_padding),
+                                end = dimensionResource(id = R.dimen.profile_list_outer_horizontal_padding),
+                                top = dimensionResource(id = R.dimen.profile_list_outer_vertical_padding)
                             )
                             .border(
                                 width = 1.dp,
