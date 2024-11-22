@@ -57,6 +57,7 @@ fun HomeDialogAddList(
                 HomeDialogAddListButtons(
                     onSubmit = onSubmit,
                     onDismissRequest = onDismissRequest,
+                    listName = listName,
                     modifier = Modifier
                         .align(Alignment.End)
                 )
@@ -98,6 +99,7 @@ fun HomeDialogAddListField(
 fun HomeDialogAddListButtons(
     onSubmit: () -> Unit,
     onDismissRequest: () -> Unit,
+    listName: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -112,7 +114,8 @@ fun HomeDialogAddListButtons(
             )
         }
         TextButton(
-            onClick = onSubmit
+            onClick = onSubmit,
+            enabled = listName.isNotEmpty()
         ) {
             Text(
                 text = stringResource(id = R.string.dialog_submit_button).uppercase()

@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.rireki.R
-import com.example.rireki.data.objects.ProfileList
+import com.example.rireki.data.ProfileList
 import com.example.rireki.data.util.getMonthName
 
 @OptIn(ExperimentalMaterial3Api::class)

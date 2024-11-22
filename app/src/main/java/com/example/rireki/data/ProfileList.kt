@@ -1,4 +1,4 @@
-package com.example.rireki.data.objects
+package com.example.rireki.data
 
 import java.time.LocalDate
 
