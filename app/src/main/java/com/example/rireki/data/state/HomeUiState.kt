@@ -1,7 +1,9 @@
 package com.example.rireki.data.state
 
-import com.example.rireki.data.objects.ProfileList
+import com.example.rireki.data.ProfileList
 
 data class HomeUiState(
-    val lists: List<ProfileList> = listOf()
+    val lists: List<ProfileList> = listOf(),
+    val newListName: String = "",
+    val isOpenDialog: Boolean = false
 )

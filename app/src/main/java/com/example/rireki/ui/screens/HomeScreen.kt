@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.model.HomeViewModel
-import com.example.rireki.data.model.NewListViewModel
+import com.example.rireki.data.util.getProfileList
 import com.example.rireki.ui.components.HomeDialogAddList
 import com.example.rireki.ui.components.HomeFloatingActionButton
 import com.example.rireki.ui.components.HomeSingleList
@@ -28,16 +28,14 @@ import com.example.rireki.ui.theme.RirekiTheme
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = viewModel(),
-    newListViewModel: NewListViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val homeUiState by homeViewModel.uiState.collectAsState()
-    val newListUiState by newListViewModel.uiState.collectAsState()
     
     Scaffold(
         topBar = { HomeTopBar() },
         floatingActionButton = { HomeFloatingActionButton(
-            onClick = { newListViewModel.toggleIsOpenDialog() }
+            onClick = { homeViewModel.toggleIsOpenDialog() }
         ) },
         modifier = modifier
     ) {
@@ -66,12 +64,16 @@ fun HomeScreen(
                     )
                 }
             }
-            if (newListUiState.isOpenDialog) {
+            if (homeUiState.isOpenDialog) {
                 HomeDialogAddList(
-                    listName = newListUiState.name,
-                    onListNameChange = { newListViewModel.updateNameInput(it) },
-                    onSubmit = { /* @TODO Wenn Liste hinzugefügt werden soll */ },
-                    onDismissRequest = { newListViewModel.toggleIsOpenDialog() }
+                    listName = homeUiState.newListName,
+                    onListNameChange = { homeViewModel.updateNameInput(it) },
+                    onSubmit = {
+                        homeViewModel.addList(
+                            getProfileList(homeUiState.newListName)
+                        )
+                    },
+                    onDismissRequest = { homeViewModel.toggleIsOpenDialog() }
                 )
             }
     }
