@@ -9,16 +9,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
-import com.example.rireki.data.dummyLists
+import com.example.rireki.data.model.HomeViewModel
+import com.example.rireki.data.model.NewListViewModel
 import com.example.rireki.ui.components.HomeDialogAddList
 import com.example.rireki.ui.components.HomeFloatingActionButton
 import com.example.rireki.ui.components.HomeSingleList
@@ -27,16 +27,17 @@ import com.example.rireki.ui.theme.RirekiTheme
 
 @Composable
 fun HomeScreen(
+    homeViewModel: HomeViewModel = viewModel(),
+    newListViewModel: NewListViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
+    val homeUiState by homeViewModel.uiState.collectAsState()
+    val newListUiState by newListViewModel.uiState.collectAsState()
     
     Scaffold(
         topBar = { HomeTopBar() },
         floatingActionButton = { HomeFloatingActionButton(
-            onClick = { openDialog = true }
+            onClick = { newListViewModel.toggleIsOpenDialog() }
         ) },
         modifier = modifier
     ) {
@@ -45,7 +46,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(paddingValues)
             ) {
-                items(dummyLists) {
+                items(homeUiState.lists) {
                     HomeSingleList(
                         profileList = it,
                         modifier = Modifier
@@ -65,10 +66,12 @@ fun HomeScreen(
                     )
                 }
             }
-            if (openDialog) {
+            if (newListUiState.isOpenDialog) {
                 HomeDialogAddList(
+                    listName = newListUiState.name,
+                    onListNameChange = { newListViewModel.updateNameInput(it) },
                     onSubmit = { /* @TODO Wenn Liste hinzugefügt werden soll */ },
-                    onDismissRequest = { openDialog = false }
+                    onDismissRequest = { newListViewModel.toggleIsOpenDialog() }
                 )
             }
     }
