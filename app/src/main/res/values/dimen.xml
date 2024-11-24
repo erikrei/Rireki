@@ -22,4 +22,10 @@
     <!--  Neue Liste Dialog  -->
     <dimen name="dialog_card_inner_padding">16.dp</dimen>
     <dimen name="dialog_card_inner_spacing">16.dp</dimen>
+
+    <!--  Einfaches Profil (Listenübersicht)  -->
+    <dimen name="simple_list_outer_horizontal_padding">16.dp</dimen>
+    <dimen name="simple_list_outer_vertical_padding">8.dp</dimen>
+    <dimen name="simple_list_inner_padding">16.dp</dimen>
+    <dimen name="simple_list_inner_component_padding">16.dp</dimen>
 </resources>

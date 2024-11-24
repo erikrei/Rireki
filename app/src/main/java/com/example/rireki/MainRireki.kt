@@ -1,28 +1,32 @@
 package com.example.rireki
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.objects.Authentication
-import com.example.rireki.data.objects.Home
+import com.example.rireki.data.objects.HomeGraph
+import com.example.rireki.data.objects.homeGraph
 import com.example.rireki.ui.screens.AuthenticationScreen
-import com.example.rireki.ui.screens.HomeScreen
 
 @Composable
 fun MainRireki(
+    homeViewModel: HomeViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController = navController,
-        startDestination = Home
+        startDestination = HomeGraph
     ) {
         composable<Authentication> {
             AuthenticationScreen()
         }
-        composable<Home> {
-            HomeScreen()
-        }
+        homeGraph(
+            homeViewModel = homeViewModel,
+            navController = navController,
+        )
     }
 }
