@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
 import com.example.rireki.data.Profile
@@ -97,6 +101,7 @@ fun ListOverviewActions(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOverviewProfile(
+    onProfileRemoveClick: () -> Unit,
     profile: Profile,
     modifier: Modifier = Modifier
 ) {
@@ -123,7 +128,7 @@ fun ListOverviewProfile(
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = onProfileRemoveClick,
                 modifier = Modifier
             ) {
                 Icon(
@@ -145,5 +150,47 @@ fun ListOverviewProfileImage(
         modifier = modifier
             .size(40.dp)
             .clip(shape = CircleShape),
+    )
+}
+
+@Composable
+fun ListOverviewRemoveProfileAlert(
+    profileToRemove: String,
+    onDismissRequest: () -> Unit,
+    onConfirmRequest: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(
+                text = stringResource(id = R.string.overview_dialog_remove_title)
+            )
+        },
+        text = {
+            Text(
+                text = "Möchten Sie wirklich $profileToRemove von der Liste entfernen?"
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirmRequest
+            ) {
+                Text(
+                    text = stringResource(id = R.string.overview_dialog_remove_confirm).uppercase(),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismissRequest
+            ) {
+                Text(
+                    text = stringResource(id = R.string.overview_dialog_remove_dismiss).uppercase()
+                )
+            }
+        },
+        modifier = modifier
     )
 }

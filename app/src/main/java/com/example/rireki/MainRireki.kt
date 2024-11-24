@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.objects.Authentication
 import com.example.rireki.data.objects.HomeGraph
@@ -15,6 +16,7 @@ import com.example.rireki.ui.screens.AuthenticationScreen
 @Composable
 fun MainRireki(
     homeViewModel: HomeViewModel = viewModel(),
+    activeProfileListViewModel: ActiveProfileListViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -25,6 +27,7 @@ fun MainRireki(
             AuthenticationScreen()
         }
         homeGraph(
+            activeProfileListViewModel = activeProfileListViewModel,
             homeViewModel = homeViewModel,
             navController = navController,
         )

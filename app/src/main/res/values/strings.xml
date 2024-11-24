@@ -16,4 +16,9 @@
     <string name="dialog_field_label">Listenname eingeben</string>
     <string name="dialog_cancel_button">Abbrechen</string>
     <string name="dialog_submit_button">Erstellen</string>
+    
+    <!--  Listenansicht  -->
+    <string name="overview_dialog_remove_title">Profil entfernen</string>
+    <string name="overview_dialog_remove_confirm">Entfernen</string>
+    <string name="overview_dialog_remove_dismiss">Zurück</string>
 </resources>
