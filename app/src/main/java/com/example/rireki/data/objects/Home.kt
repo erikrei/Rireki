@@ -1,10 +1,12 @@
 package com.example.rireki.data.objects
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.ui.screens.HomeScreen
 import com.example.rireki.ui.screens.ListOverviewScreen
@@ -22,6 +24,7 @@ data class ProfileListGraph(
 )
 
 fun NavGraphBuilder.homeGraph(
+    activeProfileListViewModel: ActiveProfileListViewModel,
     homeViewModel: HomeViewModel,
     navController: NavHostController
 ) {
@@ -43,11 +46,12 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable<ProfileListGraph> {
-            val profileListId = it.toRoute<ProfileListGraph>().id
-            val selectedList = homeViewModel.getListOfId(profileListId)
+            val selectedListId = it.toRoute<ProfileListGraph>().id
+            activeProfileListViewModel.setActiveProfileList(homeViewModel.getListOfId(selectedListId))
 
             ListOverviewScreen(
-                selectedList = selectedList,
+                activeProfileListViewModel = activeProfileListViewModel,
+                selectedList = activeProfileListViewModel.uiState.value.profileList,
                 onNavigateBack = navigateBack
             )
         }
