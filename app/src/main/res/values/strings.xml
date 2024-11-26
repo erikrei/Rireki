@@ -21,4 +21,21 @@
     <string name="overview_dialog_remove_title">Profil entfernen</string>
     <string name="overview_dialog_remove_confirm">Entfernen</string>
     <string name="overview_dialog_remove_dismiss">Zurück</string>
+
+    <!--  Listeneinstellungen  -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_label_name">Name der Liste</string>
+    <string name="settings_label_privacy">Privatsphäre</string>
+    <string name="settings_label_admin">Admins</string>
+    <string name="settings_admin_add_title">Admin hinzufügen</string>
+    <string name="settings_admin_add_label">BenutzerID eingeben</string>
+    <string name="settings_admin_add_info_text">TODO: Wird noch hinzugefügt</string>
+    <string name="settings_text_no_admin">Kein Admin hinzugefügt</string>
+    <string name="settings_admin_remove_title">Admin entfernen</string>
+    <string name="settings_admin_remove_confirm">Entfernen</string>
+    <string name="settings_admin_remove_dismiss">Zurück</string>
+    <string name="settings_delete_list_label">Liste löschen</string>
+    <string name="settings_delete_list_title">Liste löschen</string>
+    <string name="settings_delete_list_confirm">Löschen</string>
+    <string name="settings_delete_list_dismiss">Zurück</string>
 </resources>

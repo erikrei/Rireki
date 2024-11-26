@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.rireki.data.Profile
 import com.example.rireki.data.ProfileList
 import com.example.rireki.data.state.HomeUiState
+import com.example.rireki.data.state.ListSettingsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,9 +58,22 @@ val profiles: List<List<Profile>> = listOf(
     )
 )
 
+val settings: List<ListSettingsUiState> = listOf(
+    ListSettingsUiState(
+        listId = "1",
+        listName = "Jana's Bekanntschaft",
+        admins = listOf("531413", "312513", "123125")
+    ),
+    ListSettingsUiState(
+        listId = "2",
+        listName = "Erik's Verwandschaft",
+        admins = listOf("23151")
+    )
+)
+
 val dummyLists: List<ProfileList> = listOf(
-    ProfileList(id = "1", name = "Jana's Bekanntschaft", createdAt = LocalDate.of(2024, 11, 19), createdFrom = "Jana", profiles = profiles[0]),
-    ProfileList(id = "2", name = "Erik's Verwandschaft", createdAt = LocalDate.of(2024, 7, 8), createdFrom = "Erik", profiles = profiles[1]),
+    ProfileList(id = "1", name = "Jana's Bekanntschaft", createdAt = LocalDate.of(2024, 11, 19), createdFrom = "Jana", profiles = profiles[0], settings = settings[0]),
+    ProfileList(id = "2", name = "Erik's Verwandschaft", createdAt = LocalDate.of(2024, 7, 8), createdFrom = "Erik", profiles = profiles[1], settings = settings[1]),
 )
 
 
@@ -72,6 +86,17 @@ class HomeViewModel: ViewModel() {
             currentState -> currentState.copy(
                 lists = dummyLists
             )
+        }
+    }
+
+    fun removeList(listId: String) {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    lists = uiState.value.lists.filter {
+                        it.id != listId
+                    }
+                )
         }
     }
 

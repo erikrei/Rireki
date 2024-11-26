@@ -1,15 +1,20 @@
 package com.example.rireki.data.objects
 
-import android.util.Log
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.example.rireki.R
 import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.HomeViewModel
+import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.ui.screens.HomeScreen
 import com.example.rireki.ui.screens.ListOverviewScreen
+import com.example.rireki.ui.screens.ListSettingsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,21 +28,26 @@ data class ProfileListGraph(
     val id: String
 )
 
+@Serializable
+data class ActiveProfileList(
+    val id: String
+)
+
+@Serializable
+object Settings
+
 fun NavGraphBuilder.homeGraph(
-    activeProfileListViewModel: ActiveProfileListViewModel,
     homeViewModel: HomeViewModel,
+    activeProfileListViewModel: ActiveProfileListViewModel,
+    settingsViewModel: ListSettingsViewModel,
     navController: NavHostController
 ) {
     val navigateToList: (String) -> Unit = {
         navController.navigate(ProfileListGraph(id = it))
     }
 
-    val navigateBack: () -> Unit = {
-        navController.navigate(Home)
-    }
-
     navigation<HomeGraph>(
-        startDestination = Home
+        startDestination = Home,
     ) {
         composable<Home> {
             HomeScreen(
@@ -45,14 +55,69 @@ fun NavGraphBuilder.homeGraph(
                 navigateToList = navigateToList
             )
         }
-        composable<ProfileListGraph> {
-            val selectedListId = it.toRoute<ProfileListGraph>().id
+        profileListGraph(
+            activeProfileListViewModel = activeProfileListViewModel,
+            homeViewModel = homeViewModel,
+            settingsViewModel = settingsViewModel,
+            navController = navController
+        )
+    }
+}
+
+fun NavGraphBuilder.profileListGraph(
+    homeViewModel: HomeViewModel,
+    activeProfileListViewModel: ActiveProfileListViewModel,
+    settingsViewModel: ListSettingsViewModel,
+    navController: NavHostController
+) {
+    val navigateBackHome: () -> Unit = {
+        navController.navigate(Home)
+    }
+
+    val navigateBackList: () -> Unit = {
+        navController.navigate(ActiveProfileList(
+            id = activeProfileListViewModel.uiState.value.profileList.id
+        ))
+    }
+
+    val onNavigateSettings: () -> Unit = {
+        navController.navigate(Settings)
+    }
+
+    navigation<ProfileListGraph>(
+        startDestination = ActiveProfileList(
+            id = activeProfileListViewModel.uiState.value.profileList.id
+        )
+    ) {
+        composable<ActiveProfileList> {
+            val selectedListId = it.toRoute<ActiveProfileList>().id
             activeProfileListViewModel.setActiveProfileList(homeViewModel.getListOfId(selectedListId))
 
             ListOverviewScreen(
                 activeProfileListViewModel = activeProfileListViewModel,
                 selectedList = activeProfileListViewModel.uiState.value.profileList,
-                onNavigateBack = navigateBack
+                onNavigateBack = navigateBackHome,
+                onNavigateSettings = onNavigateSettings
+            )
+        }
+        composable<Settings> {
+            settingsViewModel.setListSettings(
+                activeProfileListViewModel.uiState.value.profileList
+            )
+
+            ListSettingsScreen(
+                settingsViewModel = settingsViewModel,
+                onNavigateBack = navigateBackList,
+                onListDelete = {
+                    settingsViewModel.unshowListDeleteDialog()
+                    homeViewModel.removeList(it)
+                    navController.navigate(Home)
+                },
+                modifier = Modifier
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.settings_horizontal_padding),
+                        vertical = dimensionResource(id = R.dimen.settings_vertical_padding)
+                    )
             )
         }
     }
