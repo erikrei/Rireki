@@ -16,14 +16,15 @@ import com.example.rireki.R
 import com.example.rireki.data.ProfileList
 import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.ui.components.ListOverviewProfile
-import com.example.rireki.ui.components.ListOverviewRemoveProfileAlert
 import com.example.rireki.ui.components.ListOverviewTopBar
+import com.example.rireki.ui.components.shared.ConfirmAlert
 
 @Composable
 fun ListOverviewScreen(
     activeProfileListViewModel: ActiveProfileListViewModel = viewModel(),
     selectedList: ProfileList,
     onNavigateBack: () -> Unit,
+    onNavigateSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val activeProfileListUiState by activeProfileListViewModel.uiState.collectAsState()
@@ -31,7 +32,8 @@ fun ListOverviewScreen(
     Scaffold(
         topBar = { ListOverviewTopBar(
             listName = selectedList.name,
-            onNavigateBack = onNavigateBack
+            onNavigateBack = onNavigateBack,
+            onNavigateSettings = onNavigateSettings
         ) }
     ) {
         paddingValues ->
@@ -61,10 +63,14 @@ fun ListOverviewScreen(
                 }
             }
             if (activeProfileListUiState.showRemoveProfile) {
-                ListOverviewRemoveProfileAlert(
-                    profileToRemove = activeProfileListUiState.removeProfile.name,
+                ConfirmAlert(
+                    onConfirmRequest = { activeProfileListViewModel.removeProfile() },
                     onDismissRequest = { activeProfileListViewModel.unsetRemoveProfile() },
-                    onConfirmRequest = { activeProfileListViewModel.removeProfile() })
+                    title = R.string.overview_dialog_remove_title,
+                    confirmText = R.string.overview_dialog_remove_confirm,
+                    dismissText = R.string.overview_dialog_remove_dismiss,
+                    text = "Möchten Sie wirklich ${activeProfileListUiState.removeProfile.name} von der Liste entfernen?"
+                )
             }
     }
 }

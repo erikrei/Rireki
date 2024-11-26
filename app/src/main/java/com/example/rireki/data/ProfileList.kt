@@ -1,5 +1,6 @@
 package com.example.rireki.data
 
+import com.example.rireki.data.state.ListSettingsUiState
 import java.time.LocalDate
 
 data class ProfileList(
@@ -7,5 +8,6 @@ data class ProfileList(
     val name: String = "",
     val createdFrom: String = "",
     val createdAt: LocalDate = LocalDate.now(),
-    val profiles: List<Profile> = listOf()
+    val profiles: List<Profile> = listOf(),
+    val settings: ListSettingsUiState = ListSettingsUiState()
 )

@@ -7,40 +7,40 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
 import com.example.rireki.data.Profile
+import com.example.rireki.ui.components.shared.NavigationBackArrow
 import com.example.rireki.ui.components.shared.TopBar
 
 @Composable
 fun ListOverviewTopBar(
     listName: String,
     onNavigateBack: () -> Unit,
+    onNavigateSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopBar(
         title = { ListOverviewTitle(
             title = listName
         ) },
-        navigationIcon = { ListOverviewNavigationBack(
+        navigationIcon = { NavigationBackArrow(
             onNavigateBack = onNavigateBack
         ) },
-        actions = { ListOverviewActions() },
+        actions = { ListOverviewActions(
+            onNavigateSettings = onNavigateSettings
+        ) },
         modifier = modifier
     )
 }
@@ -57,23 +57,8 @@ fun ListOverviewTitle(
 }
 
 @Composable
-fun ListOverviewNavigationBack(
-    onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        onClick = onNavigateBack,
-        modifier = modifier
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.arrow_back_24),
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
 fun ListOverviewActions(
+    onNavigateSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -88,7 +73,7 @@ fun ListOverviewActions(
             )
         }
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = onNavigateSettings
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.settings_24),
@@ -150,47 +135,5 @@ fun ListOverviewProfileImage(
         modifier = modifier
             .size(40.dp)
             .clip(shape = CircleShape),
-    )
-}
-
-@Composable
-fun ListOverviewRemoveProfileAlert(
-    profileToRemove: String,
-    onDismissRequest: () -> Unit,
-    onConfirmRequest: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(
-                text = stringResource(id = R.string.overview_dialog_remove_title)
-            )
-        },
-        text = {
-            Text(
-                text = "Möchten Sie wirklich $profileToRemove von der Liste entfernen?"
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = onConfirmRequest
-            ) {
-                Text(
-                    text = stringResource(id = R.string.overview_dialog_remove_confirm).uppercase(),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = onDismissRequest
-            ) {
-                Text(
-                    text = stringResource(id = R.string.overview_dialog_remove_dismiss).uppercase()
-                )
-            }
-        },
-        modifier = modifier
     )
 }
