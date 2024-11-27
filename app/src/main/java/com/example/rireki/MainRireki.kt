@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rireki.data.model.ActiveProfileListViewModel
+import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.data.objects.Authentication
@@ -19,6 +20,7 @@ fun MainRireki(
     homeViewModel: HomeViewModel = viewModel(),
     activeProfileListViewModel: ActiveProfileListViewModel = viewModel(),
     settingsViewModel: ListSettingsViewModel = viewModel(),
+    addProfileViewModel: AddProfileViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -32,6 +34,7 @@ fun MainRireki(
             homeViewModel = homeViewModel,
             activeProfileListViewModel = activeProfileListViewModel,
             settingsViewModel = settingsViewModel,
+            addProfileViewModel = addProfileViewModel,
             navController = navController,
         )
     }

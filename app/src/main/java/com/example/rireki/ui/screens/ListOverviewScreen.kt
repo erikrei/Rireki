@@ -25,6 +25,7 @@ fun ListOverviewScreen(
     selectedList: ProfileList,
     onNavigateBack: () -> Unit,
     onNavigateSettings: () -> Unit,
+    onNavigateAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val activeProfileListUiState by activeProfileListViewModel.uiState.collectAsState()
@@ -33,7 +34,8 @@ fun ListOverviewScreen(
         topBar = { ListOverviewTopBar(
             listName = selectedList.name,
             onNavigateBack = onNavigateBack,
-            onNavigateSettings = onNavigateSettings
+            onNavigateSettings = onNavigateSettings,
+            onNavigateAdd = onNavigateAdd
         ) }
     ) {
         paddingValues ->

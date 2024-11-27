@@ -38,4 +38,11 @@
     <string name="settings_delete_list_title">Liste löschen</string>
     <string name="settings_delete_list_confirm">Löschen</string>
     <string name="settings_delete_list_dismiss">Zurück</string>
+
+    <!--  Profil hinzufügen  -->
+    <string name="add_title">Steckbrief hinzufügen</string>
+    <string name="add_label_name">Name des Steckbriefs</string>
+    <string name="add_upload_text">Bild hinzufügen</string>
+    <string name="add_label_residence">Wohnort</string>
+    <string name="add_button">Hinzufügen</string>
 </resources>

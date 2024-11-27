@@ -43,4 +43,11 @@
     <dimen name="settings_admin_border_size">8.dp</dimen>
     <dimen name="settings_add_admin_padding">16.dp</dimen>
     <dimen name="settings_add_admin_component_padding">8.dp</dimen>
+
+    <!--  Profil hinzufügen  -->
+    <dimen name="add_horizontal_padding">16.dp</dimen>
+    <dimen name="add_vertical_padding">16.dp</dimen>
+    <dimen name="add_component_spacing">16.dp</dimen>
+    <dimen name="add_image_component_spacing">8.dp</dimen>
+    <dimen name="add_image_padding">24.dp</dimen>
 </resources>

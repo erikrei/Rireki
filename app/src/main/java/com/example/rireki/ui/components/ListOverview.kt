@@ -29,6 +29,7 @@ fun ListOverviewTopBar(
     listName: String,
     onNavigateBack: () -> Unit,
     onNavigateSettings: () -> Unit,
+    onNavigateAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopBar(
@@ -39,7 +40,8 @@ fun ListOverviewTopBar(
             onNavigateBack = onNavigateBack
         ) },
         actions = { ListOverviewActions(
-            onNavigateSettings = onNavigateSettings
+            onNavigateSettings = onNavigateSettings,
+            onNavigateAdd = onNavigateAdd
         ) },
         modifier = modifier
     )
@@ -59,13 +61,14 @@ fun ListOverviewTitle(
 @Composable
 fun ListOverviewActions(
     onNavigateSettings: () -> Unit,
+    onNavigateAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
     ) {
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = onNavigateAdd
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add_person_24),
