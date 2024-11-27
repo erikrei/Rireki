@@ -13,7 +13,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
-import com.example.rireki.data.ProfileList
+import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.ui.components.ListOverviewProfile
 import com.example.rireki.ui.components.ListOverviewTopBar

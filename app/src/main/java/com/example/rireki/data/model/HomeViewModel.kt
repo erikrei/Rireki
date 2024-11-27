@@ -1,8 +1,9 @@
 package com.example.rireki.data.model
 
 import androidx.lifecycle.ViewModel
-import com.example.rireki.data.Profile
-import com.example.rireki.data.ProfileList
+import com.example.rireki.data.dataclass.Profile
+import com.example.rireki.data.dataclass.ProfileList
+import com.example.rireki.data.enumclass.LIST_CREATE_ERROR
 import com.example.rireki.data.state.HomeUiState
 import com.example.rireki.data.state.ListSettingsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,6 +90,20 @@ class HomeViewModel: ViewModel() {
         }
     }
 
+    private fun setErrorMessage(error: Int) {
+        val errorEnum: LIST_CREATE_ERROR = when(error) {
+            1 -> LIST_CREATE_ERROR.NAME_NOT_AVAILABLE
+            else -> LIST_CREATE_ERROR.NONE
+        }
+
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    error = errorEnum
+                )
+        }
+    }
+
     fun removeList(listId: String) {
         _uiState.update {
             currentState ->
@@ -106,26 +121,31 @@ class HomeViewModel: ViewModel() {
         } ?: ProfileList()
     }
 
-    fun addList(newList: ProfileList) {
+    fun addList(newList: ProfileList, openSnackbar: () -> Unit) {
         val nameAvailable = uiState.value.lists.none {
             it.name == newList.name
         }
 
-        if (nameAvailable) {
-            _uiState.update {
-                    currentState -> currentState.copy(
-                        lists = uiState.value.lists.plus(newList),
-                        newListName = ""
-                    )
-            }
-            this.toggleIsOpenDialog()
+        if (!nameAvailable) {
+            this.setErrorMessage(1)
+            return
         }
+
+        _uiState.update {
+                currentState -> currentState.copy(
+                    lists = uiState.value.lists.plus(newList),
+                    newListName = ""
+                )
+        }
+        this.toggleIsOpenDialog()
+        openSnackbar()
     }
 
     fun updateNameInput(nameInput: String) {
         _uiState.update {
                 currentState -> currentState.copy(
-                    newListName = nameInput
+                    newListName = nameInput,
+                    error = LIST_CREATE_ERROR.NONE
                 )
         }
     }

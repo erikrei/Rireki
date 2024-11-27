@@ -1,8 +1,8 @@
 package com.example.rireki.data.model
 
 import androidx.lifecycle.ViewModel
-import com.example.rireki.data.Profile
-import com.example.rireki.data.ProfileList
+import com.example.rireki.data.dataclass.Profile
+import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.state.ActiveProfileListUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
