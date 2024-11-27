@@ -26,7 +26,6 @@ fun LabelWithInput(
             dimensionResource(id = R.dimen.label_with_input_spacing)
         ),
         modifier = modifier
-            .fillMaxWidth(),
     ) {
         Text(
             text = stringResource(id = label),

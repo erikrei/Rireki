@@ -10,9 +10,11 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.example.rireki.R
 import com.example.rireki.data.model.ActiveProfileListViewModel
+import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.ui.screens.HomeScreen
+import com.example.rireki.ui.screens.ListAddScreen
 import com.example.rireki.ui.screens.ListOverviewScreen
 import com.example.rireki.ui.screens.ListSettingsScreen
 import kotlinx.serialization.Serializable
@@ -34,12 +36,16 @@ data class ActiveProfileList(
 )
 
 @Serializable
+object AddProfile
+
+@Serializable
 object Settings
 
 fun NavGraphBuilder.homeGraph(
     homeViewModel: HomeViewModel,
     activeProfileListViewModel: ActiveProfileListViewModel,
     settingsViewModel: ListSettingsViewModel,
+    addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
 ) {
     val navigateToList: (String) -> Unit = {
@@ -59,6 +65,7 @@ fun NavGraphBuilder.homeGraph(
             activeProfileListViewModel = activeProfileListViewModel,
             homeViewModel = homeViewModel,
             settingsViewModel = settingsViewModel,
+            addProfileViewModel = addProfileViewModel,
             navController = navController
         )
     }
@@ -68,6 +75,7 @@ fun NavGraphBuilder.profileListGraph(
     homeViewModel: HomeViewModel,
     activeProfileListViewModel: ActiveProfileListViewModel,
     settingsViewModel: ListSettingsViewModel,
+    addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
 ) {
     val navigateBackHome: () -> Unit = {
@@ -84,6 +92,10 @@ fun NavGraphBuilder.profileListGraph(
         navController.navigate(Settings)
     }
 
+    val onNavigateAdd: () -> Unit = {
+        navController.navigate(AddProfile)
+    }
+
     navigation<ProfileListGraph>(
         startDestination = ActiveProfileList(
             id = activeProfileListViewModel.uiState.value.profileList.id
@@ -97,7 +109,8 @@ fun NavGraphBuilder.profileListGraph(
                 activeProfileListViewModel = activeProfileListViewModel,
                 selectedList = activeProfileListViewModel.uiState.value.profileList,
                 onNavigateBack = navigateBackHome,
-                onNavigateSettings = onNavigateSettings
+                onNavigateSettings = onNavigateSettings,
+                onNavigateAdd = onNavigateAdd
             )
         }
         composable<Settings> {
@@ -118,6 +131,17 @@ fun NavGraphBuilder.profileListGraph(
                         horizontal = dimensionResource(id = R.dimen.settings_horizontal_padding),
                         vertical = dimensionResource(id = R.dimen.settings_vertical_padding)
                     )
+            )
+        }
+        composable<AddProfile> {
+            ListAddScreen(
+                addProfileViewModel = addProfileViewModel,
+                onAddClick = {
+                    name, residence ->
+                        addProfileViewModel.resetProfileInputs()
+                        navigateBackList()
+                },
+                onNavigationBack = navigateBackList
             )
         }
     }

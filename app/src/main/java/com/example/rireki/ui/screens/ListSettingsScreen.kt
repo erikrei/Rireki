@@ -2,6 +2,7 @@ package com.example.rireki.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +51,7 @@ fun ListSettingsScreen(
                     inputValue = settings.listName,
                     onValueChange = { settingsViewModel.changeListName(it) },
                     modifier = Modifier
+                        .fillMaxWidth()
                 )
                 LabelWithDropdown(
                     label = R.string.settings_label_privacy,
