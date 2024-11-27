@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
@@ -20,6 +25,7 @@ import com.example.rireki.ui.components.HomeFloatingActionButton
 import com.example.rireki.ui.components.HomeSingleList
 import com.example.rireki.ui.components.HomeTopBar
 import com.example.rireki.ui.theme.RirekiTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -28,12 +34,26 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val homeUiState by homeViewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val listCreatedMessage = stringResource(id = R.string.dialog_snackbar_created, homeUiState.newListName)
+
+    val showListCreatedSnackbar: () -> Unit = {
+        scope.launch {
+            snackbarHostState.showSnackbar(listCreatedMessage)
+        }
+    }
     
     Scaffold(
         topBar = { HomeTopBar() },
         floatingActionButton = { HomeFloatingActionButton(
             onClick = { homeViewModel.toggleIsOpenDialog() }
         ) },
+        snackbarHost = {
+           SnackbarHost(
+               hostState = snackbarHostState
+           )
+        },
         modifier = modifier
     ) {
         paddingValues ->
@@ -62,9 +82,10 @@ fun HomeScreen(
                     onSubmit = {
                         homeViewModel.addList(
                             getProfileList(homeUiState.newListName)
-                        )
+                        ) { showListCreatedSnackbar() }
                     },
-                    onDismissRequest = { homeViewModel.toggleIsOpenDialog() }
+                    onDismissRequest = { homeViewModel.toggleIsOpenDialog() },
+                    error = homeUiState.error,
                 )
             }
     }

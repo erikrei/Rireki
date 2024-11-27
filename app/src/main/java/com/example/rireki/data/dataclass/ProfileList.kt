@@ -1,4 +1,4 @@
-package com.example.rireki.data
+package com.example.rireki.data.dataclass
 
 import com.example.rireki.data.state.ListSettingsUiState
 import java.time.LocalDate

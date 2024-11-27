@@ -1,4 +1,4 @@
-package com.example.rireki.data
+package com.example.rireki.data.dataclass
 
 data class Profile(
     val name: String = "",

@@ -20,7 +20,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
-import com.example.rireki.data.Profile
+import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.ui.components.shared.NavigationBackArrow
 import com.example.rireki.ui.components.shared.TopBar
 

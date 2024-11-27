@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Rireki</string>
+    <string name="empty" />
 
     <!--  Authentifizierung  -->
     <string name="login_header_text">Bei Rireki einloggen</string>
@@ -16,6 +17,8 @@
     <string name="dialog_field_label">Listenname eingeben</string>
     <string name="dialog_cancel_button">Abbrechen</string>
     <string name="dialog_submit_button">Erstellen</string>
+    <string name="dialog_list_not_available">Name bereits vergeben</string>
+    <string name="dialog_snackbar_created">Liste %s wurde erfolgreich erstellt.</string>
     
     <!--  Listenansicht  -->
     <string name="overview_dialog_remove_title">Profil entfernen</string>

@@ -1,6 +1,6 @@
 package com.example.rireki.data.util
 
-import com.example.rireki.data.ProfileList
+import com.example.rireki.data.dataclass.ProfileList
 import java.time.LocalDate
 
 fun getProfileList(listName: String): ProfileList {
