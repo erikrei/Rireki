@@ -14,6 +14,7 @@ import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.data.objects.Authentication
 import com.example.rireki.data.objects.Home
+import com.example.rireki.data.objects.HomeGraph
 import com.example.rireki.data.objects.homeGraph
 import com.example.rireki.ui.screens.AuthenticationScreen
 import com.google.firebase.auth.FirebaseAuth
@@ -38,7 +39,7 @@ fun MainRireki(
 
     NavHost(
         navController = navController,
-        startDestination = Authentication
+        startDestination = HomeGraph
     ) {
         composable<Authentication> {
             AuthenticationScreen(

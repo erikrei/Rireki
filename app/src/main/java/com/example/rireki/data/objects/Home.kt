@@ -118,8 +118,11 @@ fun NavGraphBuilder.profileListGraph(
                 activeProfileListViewModel.uiState.value.profileList
             )
 
+            val settingsCopy = settingsViewModel.uiState.value.copy()
+
             ListSettingsScreen(
                 settingsViewModel = settingsViewModel,
+                settingsCopy = settingsCopy,
                 onNavigateBack = navigateBackList,
                 onListDelete = {
                     settingsViewModel.unshowListDeleteDialog()

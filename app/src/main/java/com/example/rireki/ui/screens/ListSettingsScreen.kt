@@ -15,9 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.rireki.R
 import com.example.rireki.data.model.ListSettingsViewModel
+import com.example.rireki.data.state.ListSettingsUiState
+import com.example.rireki.data.util.checkIfSettingsEqual
 import com.example.rireki.ui.components.ListSettingsAdminList
 import com.example.rireki.ui.components.ListSettingsBottomSheet
 import com.example.rireki.ui.components.ListSettingsPrivacyDialog
+import com.example.rireki.ui.components.ListSettingsSaveButton
 import com.example.rireki.ui.components.ListSettingsTopBar
 import com.example.rireki.ui.components.shared.ConfirmAlert
 import com.example.rireki.ui.components.shared.LabelWithDropdown
@@ -27,6 +30,7 @@ import com.example.rireki.ui.components.shared.LabelWithInput
 @Composable
 fun ListSettingsScreen(
     settingsViewModel: ListSettingsViewModel,
+    settingsCopy: ListSettingsUiState,
     onNavigateBack: () -> Unit,
     onListDelete: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -36,7 +40,20 @@ fun ListSettingsScreen(
     Scaffold(
         topBar = { ListSettingsTopBar(
             onNavigateBack = onNavigateBack
-        ) }
+        ) },
+        bottomBar = {
+            ListSettingsSaveButton(
+                onClick = { /*TODO*/ },
+                enabled = !checkIfSettingsEqual(settingsCopy, settings),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = dimensionResource(id = R.dimen.settings_bottom_bar_padding),
+                        end = dimensionResource(id = R.dimen.settings_bottom_bar_padding),
+                        bottom = dimensionResource(id = R.dimen.settings_bottom_bar_padding)
+                    )
+            )
+        }
     ) {
         paddingValues ->
             Column(

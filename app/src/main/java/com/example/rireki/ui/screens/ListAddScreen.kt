@@ -2,7 +2,6 @@ package com.example.rireki.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -29,9 +28,24 @@ fun ListAddScreen(
     val profileValues by addProfileViewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = { ListAddTopBar(
-            onNavigationBack = onNavigationBack
-        ) },
+        topBar = {
+            ListAddTopBar(
+                onNavigationBack = onNavigationBack
+            )
+        },
+        bottomBar = {
+            ListAddButton(
+                enabled = profileValues.name.isNotEmpty() && profileValues.residence.isNotEmpty(),
+                onAddClick = { onAddClick(profileValues.name, profileValues.residence) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = dimensionResource(id = R.dimen.add_bottom_bar_padding),
+                        end = dimensionResource(id = R.dimen.add_bottom_bar_padding),
+                        bottom = dimensionResource(id = R.dimen.add_bottom_bar_padding),
+                    )
+            )
+        },
         modifier = modifier
     ) {
         paddingValues ->
@@ -59,13 +73,6 @@ fun ListAddScreen(
                     label = R.string.add_label_residence,
                     inputValue = profileValues.residence,
                     onValueChange = { addProfileViewModel.changeProfileResidence(it) }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                ListAddButton(
-                    enabled = profileValues.name.isNotEmpty() && profileValues.residence.isNotEmpty(),
-                    onAddClick = { onAddClick(profileValues.name, profileValues.residence) },
-                    modifier = Modifier
-                        .fillMaxWidth()
                 )
             }
     }
