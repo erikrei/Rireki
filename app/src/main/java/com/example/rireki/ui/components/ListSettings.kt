@@ -1,7 +1,9 @@
 package com.example.rireki.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +32,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.rireki.R
 import com.example.rireki.ui.components.shared.LabelWithIconButton
 import com.example.rireki.ui.components.shared.NavigationBackArrow
@@ -202,5 +207,68 @@ fun TextFieldWithIcon(
                     .size(48.dp)
             )
         }
+    }
+}
+
+@Composable
+fun ListSettingsPrivacyDialog(
+    activePrivacy: String,
+    privacyOptions: List<String>,
+    onPrivacySelect: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val eligableOptions = privacyOptions.minus(activePrivacy)
+
+    Dialog(
+        onDismissRequest = onDismissRequest
+    ) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    )
+
+            ) {
+                eligableOptions.forEachIndexed {
+                    index, option ->
+                        ListSettingsPrivacyOption(
+                            option = option,
+                            onPrivacySelect = onPrivacySelect
+                        )
+                        if (index != eligableOptions.size - 1) {
+                            Divider(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ListSettingsPrivacyOption(
+    option: String,
+    onPrivacySelect: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onPrivacySelect(option) }
+            .padding(
+                dimensionResource(id = R.dimen.settings_privacy_option_padding)
+            )
+    ) {
+        Text(
+            text = option,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }

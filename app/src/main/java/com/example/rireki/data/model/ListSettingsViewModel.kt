@@ -12,6 +12,24 @@ class ListSettingsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ListSettingsUiState())
     val uiState: StateFlow<ListSettingsUiState> = _uiState.asStateFlow()
 
+    fun showPrivacyDialog() {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    expandedDropdown = true
+                )
+        }
+    }
+
+    fun unshowPrivacyDialog() {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    expandedDropdown = false
+                )
+        }
+    }
+
     fun changeAdminAdd(adminInput: String) {
         _uiState.update {
             currentState ->
@@ -114,24 +132,6 @@ class ListSettingsViewModel : ViewModel() {
                 currentState.copy(
                     listPrivacy = privacy,
                     expandedDropdown = false,
-                )
-        }
-    }
-
-    fun showDropdown() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedDropdown = true
-                )
-        }
-    }
-
-    fun unshowDropdown() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedDropdown = false
                 )
         }
     }
