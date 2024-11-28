@@ -11,6 +11,12 @@
     <string name="register_text">Registrieren</string>
     <string name="info_login_text">Bereits registriert?</string>
     <string name="info_register_text">Noch keinen Account?</string>
+    <!--  Feedback  -->
+    <string name="auth_error_no_input">Eingabefeld ausfüllen.</string>
+    <string name="auth_error_bad_password">Passwort muss mindestens 8 Zeichen enthalten.</string>
+    <string name="auth_register_success">Benutzer mit Email %s erfolgreich erstellt.</string>
+    <string name="auth_register_failure">Benutzer konnte nicht erstellt werden.</string>
+    <string name="auth_login_failure">Authentifizierung fehlgeschlagen.</string>
 
     <!--  Neue Liste Dialog  -->
     <string name="dialog_title">Liste hinzufügen</string>
