@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,9 +25,6 @@ import com.example.rireki.R
 fun LabelWithDropdown(
     expandedDropdown: Boolean,
     activeDropdown: String,
-    dropdownItems: List<String>,
-    onDissmissDropdown: () -> Unit,
-    onDropdownClick: (String) -> Unit,
     onDropdownOpen: () -> Unit,
     @StringRes label: Int,
     labelColor: Color? = null,
@@ -81,24 +76,6 @@ fun LabelWithDropdown(
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
-        }
-    }
-    DropdownMenu(
-        expanded = expandedDropdown,
-        onDismissRequest = onDissmissDropdown,
-    ) {
-        dropdownItems.forEach {
-                item ->
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = item
-                    )
-                },
-                onClick = {
-                    onDropdownClick(item)
-                },
-            )
         }
     }
 }

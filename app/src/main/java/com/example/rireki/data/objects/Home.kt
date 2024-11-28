@@ -124,7 +124,9 @@ fun NavGraphBuilder.profileListGraph(
                 onListDelete = {
                     settingsViewModel.unshowListDeleteDialog()
                     homeViewModel.removeList(it)
-                    navController.navigate(Home)
+                    navController.navigate(Home) {
+                        popUpTo(navController.graph.id)
+                    }
                 },
                 modifier = Modifier
                     .padding(

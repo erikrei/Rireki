@@ -17,6 +17,7 @@ import com.example.rireki.R
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.ui.components.ListSettingsAdminList
 import com.example.rireki.ui.components.ListSettingsBottomSheet
+import com.example.rireki.ui.components.ListSettingsPrivacyDialog
 import com.example.rireki.ui.components.ListSettingsTopBar
 import com.example.rireki.ui.components.shared.ConfirmAlert
 import com.example.rireki.ui.components.shared.LabelWithDropdown
@@ -57,10 +58,7 @@ fun ListSettingsScreen(
                     label = R.string.settings_label_privacy,
                     expandedDropdown = settings.expandedDropdown,
                     activeDropdown = settings.listPrivacy,
-                    onDissmissDropdown = { settingsViewModel.unshowDropdown() },
-                    onDropdownClick = { settingsViewModel.setListPrivacy(it) },
-                    dropdownItems = settings.listPrivacyOptions,
-                    onDropdownOpen = { settingsViewModel.showDropdown() },
+                    onDropdownOpen = { settingsViewModel.showPrivacyDialog() },
                     modifier = Modifier
                 )
                 LabelWithIconButton(
@@ -82,6 +80,14 @@ fun ListSettingsScreen(
                     modifier = Modifier
                 )
             }
+        if (settings.expandedDropdown) {
+            ListSettingsPrivacyDialog(
+                onPrivacySelect = { settingsViewModel.setListPrivacy(it) },
+                onDismissRequest = { settingsViewModel.unshowPrivacyDialog() },
+                activePrivacy = settings.listPrivacy,
+                privacyOptions = settings.listPrivacyOptions
+            )
+        }
         if (settings.expandedAdminRemove) {
             ConfirmAlert(
                 onConfirmRequest = { settingsViewModel.deleteAdminFromList() },
