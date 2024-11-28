@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80617488078",
+    "project_id": "rireki-3cbe7",
+    "storage_bucket": "rireki-3cbe7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80617488078:android:e2b0acae1e39a298695a9f",
+        "android_client_info": {
+          "package_name": "com.example.rireki"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBylh4o8f7WfCTLBu4LuW8fKNEXniNxprc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

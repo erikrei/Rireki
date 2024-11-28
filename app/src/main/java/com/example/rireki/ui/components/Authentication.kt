@@ -26,10 +26,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
-import com.example.rireki.ui.theme.RirekiTheme
+import com.example.rireki.data.enumclass.AUTH_ERROR
 
 @Composable
 fun AuthHeader(
@@ -74,6 +73,7 @@ fun AuthHeader(
 fun AuthTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    error: AUTH_ERROR,
     @StringRes label: Int,
     @DrawableRes fieldIcon: Int,
     modifier: Modifier = Modifier
@@ -87,6 +87,10 @@ fun AuthTextField(
         TextField(
             value = value,
             onValueChange = onValueChange,
+            isError = error != AUTH_ERROR.NONE,
+            supportingText = {
+                Text(text = stringResource(id = error.errorText))
+            },
             singleLine = true,
             leadingIcon = {
                 Icon(
@@ -245,67 +249,5 @@ fun AuthFooter(
             isLogin = isLogin,
             onAuthSwitch = onAuthSwitch
         )
-    }
-}
-
-@Preview
-@Composable
-fun AuthFooterPreview() {
-    RirekiTheme {
-        AuthFooter(
-            isLogin = true,
-            onAuthSwitch = { }
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AuthSocialRowPreview() {
-    RirekiTheme {
-        AuthSocialRow()
-    }
-}
-
-@Preview
-@Composable
-fun AuthSocialButtonPreview() {
-    RirekiTheme {
-        AuthSocialButton(
-            socialIcon = R.drawable.google_icon,
-            onClick = { /*TODO*/ }
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AuthSubmitButtonPreview() {
-    RirekiTheme {
-        AuthSubmitButton(
-            isLogin = true,
-            onClick = { /*TODO*/ }
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AuthLabelPreview() {
-    RirekiTheme {
-        AuthTextField(
-            value = "",
-            onValueChange = { },
-            label = R.string.email_label,
-            fieldIcon = R.drawable.mail_24
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AuthHeaderPreview() {
-    RirekiTheme {
-        AuthHeader(isLogin = true)
     }
 }
