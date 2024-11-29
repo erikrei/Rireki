@@ -1,12 +1,12 @@
 package com.example.rireki.data.objects
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.toRoute
-import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
@@ -28,9 +28,7 @@ data class ProfileListGraph(
 )
 
 @Serializable
-data class ActiveProfileList(
-    val id: String
-)
+object ActiveProfileList
 
 @Serializable
 object AddProfile
@@ -40,13 +38,19 @@ object Settings
 
 fun NavGraphBuilder.homeGraph(
     homeViewModel: HomeViewModel,
-    activeProfileListViewModel: ActiveProfileListViewModel,
     settingsViewModel: ListSettingsViewModel,
     addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
 ) {
     val navigateToList: (String) -> Unit = {
-        navController.navigate(ProfileListGraph(id = it))
+        navController.navigate(
+            ProfileListGraph(
+                id = it
+            )
+        )
+        homeViewModel.setSelectedList(
+            selectedId = it
+        )
     }
 
     navigation<HomeGraph>(
@@ -59,7 +63,6 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         profileListGraph(
-            activeProfileListViewModel = activeProfileListViewModel,
             homeViewModel = homeViewModel,
             settingsViewModel = settingsViewModel,
             addProfileViewModel = addProfileViewModel,
@@ -70,7 +73,6 @@ fun NavGraphBuilder.homeGraph(
 
 fun NavGraphBuilder.profileListGraph(
     homeViewModel: HomeViewModel,
-    activeProfileListViewModel: ActiveProfileListViewModel,
     settingsViewModel: ListSettingsViewModel,
     addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
@@ -80,9 +82,7 @@ fun NavGraphBuilder.profileListGraph(
     }
 
     val navigateBackList: () -> Unit = {
-        navController.navigate(ActiveProfileList(
-            id = activeProfileListViewModel.uiState.value.profileList.id
-        ))
+        navController.navigate(ActiveProfileList)
     }
 
     val onNavigateSettings: () -> Unit = {
@@ -94,25 +94,24 @@ fun NavGraphBuilder.profileListGraph(
     }
 
     navigation<ProfileListGraph>(
-        startDestination = ActiveProfileList(
-            id = activeProfileListViewModel.uiState.value.profileList.id
-        ),
+        startDestination = ActiveProfileList
     ) {
         composable<ActiveProfileList> {
-            val selectedListId = it.toRoute<ActiveProfileList>().id
-            activeProfileListViewModel.setActiveProfileList(homeViewModel.getListOfId(selectedListId))
+            val homeUiState by homeViewModel.uiState.collectAsState()
 
             ListOverviewScreen(
-                activeProfileListViewModel = activeProfileListViewModel,
-                selectedList = activeProfileListViewModel.uiState.value.profileList,
+                homeViewModel = homeViewModel,
+                homeUiState = homeUiState,
                 onNavigateBack = navigateBackHome,
                 onNavigateSettings = onNavigateSettings,
-                onNavigateAdd = onNavigateAdd
+                onNavigateAdd = onNavigateAdd,
             )
         }
         composable<Settings> {
+            val homeUiState by homeViewModel.uiState.collectAsState()
+
             settingsViewModel.setListSettings(
-                activeProfileListViewModel.uiState.value.profileList
+                homeViewModel.getListOfId(homeUiState.selectedListId)
             )
 
             val settingsCopy = settingsViewModel.uiState.value.copy()

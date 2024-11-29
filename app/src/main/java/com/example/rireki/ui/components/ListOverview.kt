@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
 import com.example.rireki.data.dataclass.Profile
@@ -138,5 +139,15 @@ fun ListOverviewProfileImage(
         modifier = modifier
             .size(40.dp)
             .clip(shape = CircleShape),
+    )
+}
+
+@Composable
+fun ListOverviewNotFound(
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = stringResource(id = R.string.overview_dialog_not_found_text),
+        modifier = modifier
     )
 }

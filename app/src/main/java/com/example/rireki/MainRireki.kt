@@ -1,13 +1,11 @@
 package com.example.rireki
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
@@ -26,13 +24,10 @@ fun MainRireki(
     auth: FirebaseAuth,
     userViewModel: UserViewModel = viewModel(),
     homeViewModel: HomeViewModel = viewModel(),
-    activeProfileListViewModel: ActiveProfileListViewModel = viewModel(),
     settingsViewModel: ListSettingsViewModel = viewModel(),
     addProfileViewModel: AddProfileViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    Log.i("MainRireki", auth.uid.toString())
-
     val onSuccessLogin: () -> Unit = {
         navController.navigate(Home)
     }
@@ -49,7 +44,6 @@ fun MainRireki(
         }
         homeGraph(
             homeViewModel = homeViewModel,
-            activeProfileListViewModel = activeProfileListViewModel,
             settingsViewModel = settingsViewModel,
             addProfileViewModel = addProfileViewModel,
             navController = navController,
