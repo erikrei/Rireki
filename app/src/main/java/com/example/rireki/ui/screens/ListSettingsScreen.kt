@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,15 +16,13 @@ import com.example.rireki.R
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.data.state.ListSettingsUiState
 import com.example.rireki.data.util.checkIfSettingsEqual
-import com.example.rireki.ui.components.ListSettingsAdminList
-import com.example.rireki.ui.components.ListSettingsBottomSheet
+import com.example.rireki.ui.components.ListSettingsDanger
+import com.example.rireki.ui.components.ListSettingsGeneral
+import com.example.rireki.ui.components.ListSettingsPrivacy
 import com.example.rireki.ui.components.ListSettingsPrivacyDialog
 import com.example.rireki.ui.components.ListSettingsSaveButton
 import com.example.rireki.ui.components.ListSettingsTopBar
 import com.example.rireki.ui.components.shared.ConfirmAlert
-import com.example.rireki.ui.components.shared.LabelWithDropdown
-import com.example.rireki.ui.components.shared.LabelWithIconButton
-import com.example.rireki.ui.components.shared.LabelWithInput
 
 @Composable
 fun ListSettingsScreen(
@@ -53,48 +50,34 @@ fun ListSettingsScreen(
                         bottom = dimensionResource(id = R.dimen.settings_bottom_bar_padding)
                     )
             )
-        }
+        },
+        modifier = modifier
     ) {
         paddingValues ->
             Column(
                 verticalArrangement = Arrangement.spacedBy(
-                    dimensionResource(id = R.dimen.settings_component_spacing)
+                    dimensionResource(id = R.dimen.settings_all_component_spacing_new)
                 ),
-                modifier = modifier
+                modifier = Modifier
                     .padding(paddingValues)
-                    .verticalScroll(state = rememberScrollState())
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.settings_horizontal_padding),
+                        vertical = dimensionResource(id = R.dimen.settings_vertical_padding)
+                    )
+                    .verticalScroll(rememberScrollState())
             ) {
-                LabelWithInput(
-                    label = R.string.settings_label_name,
+                ListSettingsGeneral(
+                    category = R.string.settings_category_general,
                     inputValue = settings.listName,
-                    onValueChange = { settingsViewModel.changeListName(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    onValueChange = { settingsViewModel.changeListName(it) }
                 )
-                LabelWithDropdown(
-                    label = R.string.settings_label_privacy,
-                    expandedDropdown = settings.expandedDropdown,
-                    activeDropdown = settings.listPrivacy,
-                    onDropdownOpen = { settingsViewModel.showPrivacyDialog() },
-                    modifier = Modifier
+                ListSettingsPrivacy(
+                    activePrivacy = settings.listPrivacy,
+                    showDropdown = settings.expandedDropdown,
+                    onDropdownOpen = { settingsViewModel.showPrivacyDialog() }
                 )
-                LabelWithIconButton(
-                    label = R.string.settings_label_admin,
-                    icon = R.drawable.add_24,
-                    onIconClick = { settingsViewModel.showAdminAddBottomSheet() },
-                    modifier = Modifier
-                )
-                ListSettingsAdminList(
-                    adminList = settings.admins,
-                    showAdminDeleteDialog = { settingsViewModel.showAdminRemoveDialog(it) },
-                    modifier = Modifier
-                )
-                LabelWithIconButton(
-                    label = R.string.settings_delete_list_label,
-                    icon = R.drawable.delete_24,
-                    onIconClick = { settingsViewModel.showListDeleteDialog() },
-                    iconColor = MaterialTheme.colorScheme.error,
-                    modifier = Modifier
+                ListSettingsDanger(
+                    onShowListDeleteDialog = { settingsViewModel.showListDeleteDialog() },
                 )
             }
         if (settings.expandedDropdown) {
@@ -105,16 +88,6 @@ fun ListSettingsScreen(
                 privacyOptions = settings.listPrivacyOptions
             )
         }
-        if (settings.expandedAdminRemove) {
-            ConfirmAlert(
-                onConfirmRequest = { settingsViewModel.deleteAdminFromList() },
-                onDismissRequest = { settingsViewModel.unshowAdminRemoveDialog() },
-                title = R.string.settings_admin_remove_title,
-                confirmText = R.string.settings_admin_remove_confirm,
-                dismissText = R.string.settings_admin_remove_dismiss,
-                text = "Möchten Sie wirklich ${settings.adminDeleteSelected} als Admin entfernen?"
-            )
-        }
         if (settings.expandedListDelete) {
             ConfirmAlert(
                 onConfirmRequest = { onListDelete(settings.listId) },
@@ -123,14 +96,6 @@ fun ListSettingsScreen(
                 confirmText = R.string.settings_delete_list_confirm,
                 dismissText = R.string.settings_delete_list_dismiss,
                 text = "Möchten Sie die Liste ${settings.listName} wirklich löschen?"
-            )
-        }
-        if (settings.expandedAdminAddBottomSheet) {
-            ListSettingsBottomSheet(
-                value = settings.adminAdd,
-                onDismissRequest = { settingsViewModel.unshowAdminAddBottomSheet() },
-                onValueChange = { settingsViewModel.changeAdminAdd(it) },
-                onAdminAdd = {  }, // @TODO
             )
         }
     }

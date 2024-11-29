@@ -36,11 +36,12 @@ fun ListOverviewScreen(
             onNavigateBack = onNavigateBack,
             onNavigateSettings = onNavigateSettings,
             onNavigateAdd = onNavigateAdd
-        ) }
+        ) },
+        modifier = modifier
     ) {
         paddingValues ->
             LazyColumn(
-                modifier = modifier
+                modifier = Modifier
                     .padding(paddingValues)
             ) {
                 itemsIndexed(activeProfileListUiState.profileList.profiles) {

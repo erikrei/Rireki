@@ -47,13 +47,14 @@ fun AuthenticationScreen(
             SnackbarHost(
                 hostState = snackbarHostState
             )
-        }
+        },
+        modifier = modifier
     ) {
         paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(

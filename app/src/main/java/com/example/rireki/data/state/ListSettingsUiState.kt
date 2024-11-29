@@ -9,9 +9,5 @@ data class ListSettingsUiState(
         "Privat", "Öffentlich", "Geschlossen", "Bestätigung"
     ),
     var expandedDropdown: Boolean = false,
-    var expandedAdminRemove: Boolean = false,
-    var adminDeleteSelected: String = "",
     var expandedListDelete: Boolean = false,
-    var expandedAdminAddBottomSheet: Boolean = false,
-    var adminAdd: String = ""
 )

@@ -1,41 +1,28 @@
 package com.example.rireki.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.rireki.R
+import com.example.rireki.ui.components.shared.LabelWithDropdown
 import com.example.rireki.ui.components.shared.LabelWithIconButton
+import com.example.rireki.ui.components.shared.LabelWithInput
 import com.example.rireki.ui.components.shared.NavigationBackArrow
 import com.example.rireki.ui.components.shared.TopBar
 
@@ -67,147 +54,95 @@ fun ListSettingsTopBarTitle(
 }
 
 @Composable
-fun ListSettingsAdminList(
-    adminList: List<String>,
-    showAdminDeleteDialog: (String) -> Unit,
-    modifier: Modifier = Modifier
+fun ListSettingsCategory(
+    category: String,
+    actions: (@Composable () -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    categoryContent: @Composable () -> Unit,
 ) {
-    if (adminList.isEmpty()) {
-        Text(
-            text = stringResource(id = R.string.settings_text_no_admin),
-            modifier = modifier
-                .fillMaxWidth()
-        )
-    } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(
-                dimensionResource(id = R.dimen.settings_admin_spacing)
-            ),
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            adminList.forEach {
-                ListSettingsAdminRow(
-                    admin = it,
-                    showAdminDeleteDialog = showAdminDeleteDialog,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ListSettingsAdminRow(
-    admin: String,
-    showAdminDeleteDialog: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .border(
-                width = dimensionResource(id = R.dimen.settings_admin_border_width),
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                shape = RoundedCornerShape(
-                    dimensionResource(id = R.dimen.settings_admin_border_size)
-                )
-            )
-            .padding(
-                all = dimensionResource(id = R.dimen.settings_admin_inner_padding)
-            )
-    ) {
-        Text(
-            text = admin
-        )
-        IconButton(
-            onClick = { showAdminDeleteDialog(admin) }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.minus_24),
-                contentDescription = null
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ListSettingsBottomSheet(
-    value: String,
-    onValueChange: (String) -> Unit,
-    onAdminAdd: (String) -> Unit = {},
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
+    Column(
+        verticalArrangement = Arrangement.spacedBy(
+            dimensionResource(id = R.dimen.settings_single_component_spacing_new)
+        ),
         modifier = modifier
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(
-                dimensionResource(id = R.dimen.settings_add_admin_component_padding)
-            ),
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .navigationBarsPadding()
-                .padding(
-                    dimensionResource(id = R.dimen.settings_add_admin_padding)
-                )
+                .fillMaxWidth()
         ) {
-            var showInformation by remember {
-                mutableStateOf(false)
-            }
-
-            LabelWithIconButton(
-                label = R.string.settings_admin_add_label,
-                icon = R.drawable.info_24,
-                onIconClick = { showInformation = !showInformation }
+            Text(
+                text = category,
+                style = MaterialTheme.typography.titleLarge
             )
-            AnimatedVisibility(
-                visible = showInformation
-            ) {
-                Text(
-                    text = stringResource(id = R.string.settings_admin_add_info_text)
-                )
-            }
-            TextFieldWithIcon(
-                textFieldValue = value,
-                onValueChange = { onValueChange(it) },
-                onAdminAdd = onAdminAdd
-            )
+            if (actions != null) actions()
         }
+        Divider(
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            thickness = dimensionResource(id = R.dimen.settings_category_divider_width)
+        )
+        categoryContent()
     }
 }
 
 @Composable
-fun TextFieldWithIcon(
-    textFieldValue: String,
+fun ListSettingsGeneral(
+    inputValue: String,
     onValueChange: (String) -> Unit,
-    onAdminAdd: (String) -> Unit,
+    @StringRes category: Int,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    ListSettingsCategory(
+        category = stringResource(id = category),
         modifier = modifier
-            .fillMaxWidth()
     ) {
-        TextField(
-            value = textFieldValue,
-            onValueChange = onValueChange
+        LabelWithInput(
+            label = R.string.settings_label_name,
+            inputValue = inputValue,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
         )
-        IconButton(
-            onClick = { onAdminAdd(textFieldValue) }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.add_24),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(48.dp)
-            )
-        }
+    }
+}
+
+@Composable
+fun ListSettingsPrivacy(
+    activePrivacy: String,
+    showDropdown: Boolean,
+    onDropdownOpen: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ListSettingsCategory(
+        category = stringResource(id = R.string.settings_category_privacy),
+        modifier = modifier
+    ) {
+        LabelWithDropdown(
+            label = R.string.settings_label_privacy,
+            expandedDropdown = showDropdown,
+            activeDropdown = activePrivacy,
+            onDropdownOpen = onDropdownOpen,
+            modifier = Modifier
+        )
+    }
+}
+
+@Composable
+fun ListSettingsDanger(
+    onShowListDeleteDialog: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ListSettingsCategory(
+        category = stringResource(id = R.string.settings_category_danger),
+        modifier = modifier
+    ) {
+        LabelWithIconButton(
+            label = R.string.settings_delete_list_label,
+            icon = R.drawable.delete_24,
+            onIconClick = onShowListDeleteDialog,
+            iconColor = MaterialTheme.colorScheme.error,
+        )
     }
 }
 
