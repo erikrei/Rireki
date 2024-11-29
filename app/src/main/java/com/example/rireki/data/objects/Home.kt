@@ -1,14 +1,11 @@
 package com.example.rireki.data.objects
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.example.rireki.R
 import com.example.rireki.data.model.ActiveProfileListViewModel
 import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
@@ -99,7 +96,7 @@ fun NavGraphBuilder.profileListGraph(
     navigation<ProfileListGraph>(
         startDestination = ActiveProfileList(
             id = activeProfileListViewModel.uiState.value.profileList.id
-        )
+        ),
     ) {
         composable<ActiveProfileList> {
             val selectedListId = it.toRoute<ActiveProfileList>().id
@@ -132,10 +129,6 @@ fun NavGraphBuilder.profileListGraph(
                     }
                 },
                 modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(id = R.dimen.settings_horizontal_padding),
-                        vertical = dimensionResource(id = R.dimen.settings_vertical_padding)
-                    )
             )
         }
         composable<AddProfile> {

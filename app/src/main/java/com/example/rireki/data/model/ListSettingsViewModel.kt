@@ -30,33 +30,6 @@ class ListSettingsViewModel : ViewModel() {
         }
     }
 
-    fun changeAdminAdd(adminInput: String) {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    adminAdd = adminInput
-                )
-        }
-    }
-
-    fun showAdminAddBottomSheet() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedAdminAddBottomSheet = true
-                )
-        }
-    }
-
-    fun unshowAdminAddBottomSheet() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedAdminAddBottomSheet = false
-                )
-        }
-    }
-
     fun showListDeleteDialog() {
         _uiState.update {
             currentState ->
@@ -71,36 +44,6 @@ class ListSettingsViewModel : ViewModel() {
             currentState ->
                 currentState.copy(
                     expandedListDelete = false
-                )
-        }
-    }
-
-    fun deleteAdminFromList() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    admins = uiState.value.admins.minus(uiState.value.adminDeleteSelected),
-                )
-        }
-        this.unshowAdminRemoveDialog()
-    }
-
-    fun showAdminRemoveDialog(admin: String) {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedAdminRemove = true,
-                    adminDeleteSelected = admin
-                )
-        }
-    }
-
-    fun unshowAdminRemoveDialog() {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    expandedAdminRemove = false,
-                    adminDeleteSelected = ""
                 )
         }
     }
