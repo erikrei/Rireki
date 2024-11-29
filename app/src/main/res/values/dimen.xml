@@ -2,6 +2,7 @@
 <resources>
     <!--  Generell  -->
     <dimen name="label_with_input_spacing">8dp</dimen>
+    <dimen name="zero">0dp</dimen>
 
     <!--  Authentifizierung  -->
     <dimen name="auth_horizontal_padding">12dp</dimen>
@@ -29,8 +30,9 @@
     <dimen name="dialog_card_error_spacing">16dp</dimen>
 
     <!--  Einfaches Profil (Listenübersicht)  -->
-    <dimen name="simple_list_outer_horizontal_padding">16dp</dimen>
-    <dimen name="simple_list_outer_vertical_padding">8dp</dimen>
+    <dimen name="simple_list_container_vertical_padding">8dp</dimen>
+    <dimen name="simple_list_container_horizontal_padding">16dp</dimen>
+    <dimen name="simple_list_elements_spacing">8dp</dimen>
     <dimen name="simple_list_inner_padding">16dp</dimen>
     <dimen name="simple_list_inner_component_padding">16dp</dimen>
 

@@ -9,5 +9,7 @@ data class ProfileList(
     val createdFrom: String = "",
     val createdAt: LocalDate = LocalDate.now(),
     val profiles: List<Profile> = listOf(),
-    val settings: ListSettingsUiState = ListSettingsUiState()
+    val settings: ListSettingsUiState = ListSettingsUiState(),
+    val showRemoveProfile: Boolean = false,
+    val removeProfile: String = "",
 )

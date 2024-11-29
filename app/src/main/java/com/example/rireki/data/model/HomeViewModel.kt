@@ -1,82 +1,14 @@
 package com.example.rireki.data.model
 
 import androidx.lifecycle.ViewModel
-import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.dataclass.ProfileList
+import com.example.rireki.data.dummyLists
 import com.example.rireki.data.enumclass.LIST_CREATE_ERROR
 import com.example.rireki.data.state.HomeUiState
-import com.example.rireki.data.state.ListSettingsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.LocalDate
-
-
-val profiles: List<List<Profile>> = listOf(
-    listOf(
-        Profile(
-            name = "Erik"
-        ),
-        Profile(
-            name = "Julia"
-        ),
-        Profile(
-            name = "Teresa"
-        ),
-        Profile(
-            name = "Pia"
-        ),
-        Profile(
-            name = "Leonie"
-        ),
-        Profile(
-            name = "Gil"
-        ),
-        Profile(
-            name = "Melanie"
-        ),
-        Profile(
-            name = "Viktor"
-        ),
-        Profile(
-            name = "Fabian"
-        ),
-        Profile(
-            name = "Lara"
-        ),
-        Profile(
-            name = "Fabiano"
-        )
-    ),
-    listOf(
-        Profile(
-            name = "Rosa"
-        ),
-        Profile(
-            name = "Georg"
-        )
-    )
-)
-
-val settings: List<ListSettingsUiState> = listOf(
-    ListSettingsUiState(
-        listId = "1",
-        listName = "Jana's Bekanntschaft",
-        admins = listOf("531413", "312513", "123125")
-    ),
-    ListSettingsUiState(
-        listId = "2",
-        listName = "Erik's Verwandschaft",
-        admins = listOf("23151")
-    )
-)
-
-val dummyLists: List<ProfileList> = listOf(
-    ProfileList(id = "1", name = "Jana's Bekanntschaft", createdAt = LocalDate.of(2024, 11, 19), createdFrom = "Jana", profiles = profiles[0], settings = settings[0]),
-    ProfileList(id = "2", name = "Erik's Verwandschaft", createdAt = LocalDate.of(2024, 7, 8), createdFrom = "Erik", profiles = profiles[1], settings = settings[1]),
-)
-
 
 class HomeViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -88,6 +20,59 @@ class HomeViewModel: ViewModel() {
                 lists = dummyLists
             )
         }
+    }
+
+    fun setSelectedList(selectedId: String) {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    selectedListId = selectedId
+                )
+        }
+    }
+
+    fun setProfileToRemoveFromList(listId: String, profileName: String) {
+        val newProfileLists = uiState.value.lists.map {
+            it.copy(
+                showRemoveProfile = listId == it.id,
+                removeProfile = if (it.id == listId) profileName else it.removeProfile
+            )
+        }
+
+        this.updateLists(newProfileLists)
+    }
+
+    fun unsetShowProfileRemove() {
+        val newProfileLists = uiState.value.lists.map {
+            it.copy(
+                showRemoveProfile = false,
+                removeProfile = ""
+            )
+        }
+
+        this.updateLists(newProfileLists)
+    }
+
+    private fun updateLists(newLists: List<ProfileList>) {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    lists = newLists
+                )
+        }
+    }
+
+    fun removeProfileFromList(listId: String, profileName: String) {
+        val newProfilesOfList = uiState.value.lists.map {
+            val newSelectedProfiles = it.profiles.filter { profile -> profile.name != profileName }
+            it.copy(
+                profiles = if (it.id == listId) newSelectedProfiles else it.profiles,
+                showRemoveProfile = false,
+                removeProfile = ""
+            )
+        }
+
+        this.updateLists(newProfilesOfList)
     }
 
     private fun setErrorMessage(error: Int) {
