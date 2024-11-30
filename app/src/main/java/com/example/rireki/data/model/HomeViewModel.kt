@@ -1,6 +1,7 @@
 package com.example.rireki.data.model
 
 import androidx.lifecycle.ViewModel
+import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.dummyLists
 import com.example.rireki.data.enumclass.LIST_CREATE_ERROR
@@ -20,6 +21,22 @@ class HomeViewModel: ViewModel() {
                 lists = dummyLists
             )
         }
+    }
+
+    fun addProfileToList(profileName: String, profileResidence: String) {
+        val selectedId = uiState.value.selectedListId
+        val profileToAdd = Profile(
+            name = profileName,
+            residence = profileResidence
+        )
+
+        val newProfileLists = uiState.value.lists.map {
+            it.copy(
+                profiles = if (it.id == selectedId) it.profiles.plus(profileToAdd) else it.profiles
+            )
+        }
+
+        this.updateLists(newProfileLists)
     }
 
     fun setSelectedList(selectedId: String) {
@@ -63,7 +80,7 @@ class HomeViewModel: ViewModel() {
     }
 
     fun removeProfileFromList(listId: String, profileName: String) {
-        val newProfilesOfList = uiState.value.lists.map {
+        val newProfilesList = uiState.value.lists.map {
             val newSelectedProfiles = it.profiles.filter { profile -> profile.name != profileName }
             it.copy(
                 profiles = if (it.id == listId) newSelectedProfiles else it.profiles,
@@ -72,7 +89,7 @@ class HomeViewModel: ViewModel() {
             )
         }
 
-        this.updateLists(newProfilesOfList)
+        this.updateLists(newProfilesList)
     }
 
     private fun setErrorMessage(error: Int) {

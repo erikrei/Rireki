@@ -135,6 +135,10 @@ fun NavGraphBuilder.profileListGraph(
                 addProfileViewModel = addProfileViewModel,
                 onAddClick = {
                     name, residence ->
+                        homeViewModel.addProfileToList(
+                            profileName = name,
+                            profileResidence = residence
+                        )
                         addProfileViewModel.resetProfileInputs()
                         navigateBackList()
                 },
