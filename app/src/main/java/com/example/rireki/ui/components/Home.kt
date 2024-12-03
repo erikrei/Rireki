@@ -12,6 +12,9 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -73,6 +76,21 @@ fun HomeTopBarActions(
         Icon(
             painter = painterResource(id = R.drawable.notification_24),
             contentDescription = null,
+        )
+    }
+}
+
+@Composable
+fun HomeSnackbar(
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier
+) {
+    SnackbarHost(
+        hostState = snackbarHostState,
+        modifier = modifier
+    ) {
+        Snackbar(
+            snackbarData = it,
         )
     }
 }

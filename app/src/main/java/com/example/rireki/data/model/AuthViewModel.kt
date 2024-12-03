@@ -1,9 +1,9 @@
 package com.example.rireki.data.model
 
-import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import com.example.rireki.data.enumclass.AUTH_ERROR
+import com.example.rireki.data.enumclass.TOAST_TYPE
 import com.example.rireki.data.state.AuthUiState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
@@ -50,15 +50,21 @@ class AuthViewModel : ViewModel() {
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
+                this.setToastType(TOAST_TYPE.NONE)
                 if (it.isSuccessful) {
-                    Log.i("AuthViewModel", "Benutzer mit Email $email wurde erfolgreich erstellt")
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(successText)
+                        snackbarHostState.showSnackbar(
+                            message = successText,
+                            withDismissAction = true
+                        )
                     }
                 } else {
-                    Log.w("AuthViewModel", it.exception)
+                    this.setToastType(TOAST_TYPE.FAILURE)
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(failureText)
+                        snackbarHostState.showSnackbar(
+                            message = failureText,
+                            withDismissAction = true
+                        )
                     }
                 }
             }
@@ -70,6 +76,15 @@ class AuthViewModel : ViewModel() {
                 currentState.copy(
                     emailError = AUTH_ERROR.NONE,
                     passwordError = AUTH_ERROR.NONE
+                )
+        }
+    }
+
+    private fun setToastType(toastType: TOAST_TYPE) {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    toastType = toastType
                 )
         }
     }
@@ -89,12 +104,14 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Log.i("AuthViewModel", "Benutzer $email erfolgreich eingeloggt.")
                     onSuccessLogin()
                 } else {
-                    Log.w("AuthViewModel", it.exception)
+                    this.setToastType(TOAST_TYPE.FAILURE)
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(failureText)
+                        snackbarHostState.showSnackbar(
+                            message = failureText,
+                            withDismissAction = true,
+                        )
                     }
                 }
             }
