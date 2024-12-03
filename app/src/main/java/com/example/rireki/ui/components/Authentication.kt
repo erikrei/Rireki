@@ -17,6 +17,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
 import com.example.rireki.data.enumclass.AUTH_ERROR
+import com.example.rireki.data.enumclass.TOAST_TYPE
 
 @Composable
 fun AuthHeader(
@@ -65,6 +70,40 @@ fun AuthHeader(
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
 //            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+fun AuthSnackbar(
+    snackbarHostState: SnackbarHostState,
+    toastType: TOAST_TYPE,
+    modifier: Modifier = Modifier
+) {
+    val containerColor = when (toastType) {
+        TOAST_TYPE.FAILURE -> MaterialTheme.colorScheme.errorContainer
+        else -> SnackbarDefaults.color
+    }
+
+    val contentColor = when (toastType) {
+        TOAST_TYPE.FAILURE -> MaterialTheme.colorScheme.onErrorContainer
+        else -> SnackbarDefaults.contentColor
+    }
+
+    val dismissActionContentColor = when (toastType) {
+        TOAST_TYPE.FAILURE -> MaterialTheme.colorScheme.onErrorContainer
+        else -> SnackbarDefaults.dismissActionContentColor
+    }
+
+    SnackbarHost(
+        hostState = snackbarHostState,
+        modifier = modifier
+    ) {
+        Snackbar(
+            snackbarData = it,
+            containerColor = containerColor,
+            contentColor = contentColor,
+            dismissActionContentColor = dismissActionContentColor
         )
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +22,7 @@ import com.example.rireki.R
 import com.example.rireki.data.model.AuthViewModel
 import com.example.rireki.ui.components.AuthFooter
 import com.example.rireki.ui.components.AuthHeader
+import com.example.rireki.ui.components.AuthSnackbar
 import com.example.rireki.ui.components.AuthSubmitButton
 import com.example.rireki.ui.components.AuthTextField
 import com.google.firebase.auth.FirebaseAuth
@@ -44,8 +44,9 @@ fun AuthenticationScreen(
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState
+            AuthSnackbar(
+                toastType = authUiState.toastType,
+                snackbarHostState = snackbarHostState
             )
         },
         modifier = modifier

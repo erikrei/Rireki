@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +22,7 @@ import com.example.rireki.data.util.getProfileList
 import com.example.rireki.ui.components.HomeDialogAddList
 import com.example.rireki.ui.components.HomeFloatingActionButton
 import com.example.rireki.ui.components.HomeSingleList
+import com.example.rireki.ui.components.HomeSnackbar
 import com.example.rireki.ui.components.HomeTopBar
 import com.example.rireki.ui.theme.RirekiTheme
 import kotlinx.coroutines.launch
@@ -40,18 +40,23 @@ fun HomeScreen(
 
     val showListCreatedSnackbar: () -> Unit = {
         scope.launch {
-            snackbarHostState.showSnackbar(listCreatedMessage)
+            snackbarHostState.showSnackbar(
+                message = listCreatedMessage,
+                withDismissAction = true,
+            )
         }
     }
     
     Scaffold(
         topBar = { HomeTopBar() },
-        floatingActionButton = { HomeFloatingActionButton(
-            onClick = { homeViewModel.toggleIsOpenDialog() }
-        ) },
+        floatingActionButton = {
+            HomeFloatingActionButton(
+                onClick = { homeViewModel.toggleIsOpenDialog() }
+            )
+        },
         snackbarHost = {
-           SnackbarHost(
-               hostState = snackbarHostState
+           HomeSnackbar(
+               snackbarHostState = snackbarHostState
            )
         },
         modifier = modifier
