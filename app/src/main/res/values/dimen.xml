@@ -4,6 +4,9 @@
     <dimen name="label_with_input_spacing">8dp</dimen>
     <dimen name="zero">0dp</dimen>
 
+    <!--  Start  -->
+    <dimen name="start_component_spacing">8.dp</dimen>
+
     <!--  Authentifizierung  -->
     <dimen name="auth_horizontal_padding">12dp</dimen>
     <dimen name="auth_vertical_padding">24dp</dimen>

@@ -2,6 +2,13 @@
     <string name="app_name">Rireki</string>
     <string name="empty" />
 
+    <!--  Start  -->
+    <string name="start_init">Initialisiere Überprüfung</string>
+    <string name="start_load">Daten werden geladen</string>
+    <string name="start_complete">Überprüfung abgeschlossen</string>
+    <string name="start_not_logged_in">Authentifizierung fehlgeschlagen</string>
+    <string name="start_redirect">Weiterleitung an Authentifizierung</string>
+
     <!--  Authentifizierung  -->
     <string name="login_header_text">Bei Rireki einloggen</string>
     <string name="register_header_text">Auf Rireki registrieren</string>
