@@ -139,6 +139,8 @@ class AuthViewModel : ViewModel() {
                 email = "",
                 password = "",
                 isLogin = !uiState.value.isLogin,
+                emailError = AUTH_ERROR.NONE,
+                passwordError = AUTH_ERROR.NONE
             )
         }
     }

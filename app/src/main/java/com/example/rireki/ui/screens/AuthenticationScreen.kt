@@ -20,11 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.model.AuthViewModel
+import com.example.rireki.ui.components.AuthEmailField
 import com.example.rireki.ui.components.AuthFooter
 import com.example.rireki.ui.components.AuthHeader
+import com.example.rireki.ui.components.AuthPasswordField
 import com.example.rireki.ui.components.AuthSnackbar
 import com.example.rireki.ui.components.AuthSubmitButton
-import com.example.rireki.ui.components.AuthTextField
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -41,6 +42,30 @@ fun AuthenticationScreen(
     val successTextRegister = stringResource(id = R.string.auth_register_success, authUiState.email)
     val failureTextRegister = stringResource(id = R.string.auth_register_failure)
     val failureTextLogin = stringResource(id = R.string.auth_login_failure)
+
+    val onSubmit: () -> Unit = {
+        if (authUiState.isLogin) {
+            authViewModel.loginUser(
+                auth = auth,
+                email = authUiState.email,
+                password = authUiState.password,
+                onSuccessLogin = onSuccessLogin,
+                coroutineScope = scope,
+                snackbarHostState = snackbarHostState,
+                failureText = failureTextLogin
+            )
+        } else {
+            authViewModel.registerUser(
+                auth = auth,
+                email = authUiState.email,
+                password = authUiState.password,
+                coroutineScope = scope,
+                snackbarHostState = snackbarHostState,
+                successText = successTextRegister,
+                failureText = failureTextRegister
+            )
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -73,45 +98,24 @@ fun AuthenticationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    AuthTextField(
+                    AuthEmailField(
                         value = authUiState.email,
                         onValueChange = { authViewModel.updateEmailInput(it) },
                         label = R.string.email_label,
                         fieldIcon = R.drawable.mail_24,
                         error = authUiState.emailError
                     )
-                    AuthTextField(
+                    AuthPasswordField(
                         value = authUiState.password,
                         onValueChange = { authViewModel.updatePasswordInput(it) },
                         label = R.string.password_label,
                         fieldIcon = R.drawable.key_24,
-                        error = authUiState.passwordError
+                        error = authUiState.passwordError,
+                        onDone = onSubmit
                     )
                     AuthSubmitButton(
                         isLogin = authUiState.isLogin,
-                        onClick = {
-                            if (authUiState.isLogin) {
-                                authViewModel.loginUser(
-                                    auth = auth,
-                                    email = authUiState.email,
-                                    password = authUiState.password,
-                                    onSuccessLogin = onSuccessLogin,
-                                    coroutineScope = scope,
-                                    snackbarHostState = snackbarHostState,
-                                    failureText = failureTextLogin
-                                )
-                            } else {
-                                authViewModel.registerUser(
-                                    auth = auth,
-                                    email = authUiState.email,
-                                    password = authUiState.password,
-                                    coroutineScope = scope,
-                                    snackbarHostState = snackbarHostState,
-                                    successText = successTextRegister,
-                                    failureText = failureTextRegister
-                                )
-                            }
-                        },
+                        onClick = onSubmit,
                         modifier = Modifier
                             .fillMaxWidth()
                     )
