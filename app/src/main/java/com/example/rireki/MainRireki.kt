@@ -12,8 +12,9 @@ import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.data.objects.Authentication
 import com.example.rireki.data.objects.Home
-import com.example.rireki.data.objects.HomeGraph
+import com.example.rireki.data.objects.Start
 import com.example.rireki.data.objects.homeGraph
+import com.example.rireki.data.objects.startGraph
 import com.example.rireki.ui.screens.AuthenticationScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -29,13 +30,26 @@ fun MainRireki(
     navController: NavHostController = rememberNavController()
 ) {
     val onSuccessLogin: () -> Unit = {
+        navController.navigate(Start)
+    }
+
+    val onFailureLoadUser: () -> Unit = {
+        navController.navigate(Authentication)
+    }
+
+    val onSuccessLoadUser: () -> Unit = {
         navController.navigate(Home)
     }
 
     NavHost(
         navController = navController,
-        startDestination = HomeGraph
+        startDestination = Start
     ) {
+        startGraph(
+            auth = auth,
+            navigateToHome = onSuccessLoadUser,
+            navigateAuthentication = onFailureLoadUser
+        )
         composable<Authentication> {
             AuthenticationScreen(
                 auth = auth,
