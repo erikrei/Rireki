@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,12 +26,20 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
 import com.example.rireki.data.enumclass.AUTH_ERROR
@@ -109,7 +119,7 @@ fun AuthSnackbar(
 }
 
 @Composable
-fun AuthTextField(
+fun AuthEmailField(
     value: String,
     onValueChange: (String) -> Unit,
     error: AUTH_ERROR,
@@ -137,9 +147,94 @@ fun AuthTextField(
                     contentDescription = null
                 )
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             modifier = Modifier
                 .fillMaxWidth()
         )
+    }
+}
+
+@Composable
+fun AuthPasswordField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    error: AUTH_ERROR,
+    onDone: () -> Unit,
+    @StringRes label: Int,
+    @DrawableRes fieldIcon: Int,
+    modifier: Modifier = Modifier
+) {
+    var showPassword by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(id = label)
+        )
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            isError = error != AUTH_ERROR.NONE,
+            supportingText = {
+                Text(text = stringResource(id = error.errorText))
+            },
+            singleLine = true,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = fieldIcon),
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                AuthPasswordFieldVisibilityIcon(
+                    showPassword = showPassword,
+                    toggleVisibility = { showPassword = !showPassword }
+                )
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onDone() }
+            ),
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun AuthPasswordFieldVisibilityIcon(
+    showPassword: Boolean,
+    toggleVisibility: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (showPassword) {
+        IconButton(
+            onClick = toggleVisibility,
+            modifier = modifier
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.no_visibility_24),
+                contentDescription = null
+            )
+        }
+    } else {
+        IconButton(
+            onClick = toggleVisibility,
+            modifier = modifier
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.visibility_24),
+                contentDescription = null
+            )
+        }
     }
 }
 
