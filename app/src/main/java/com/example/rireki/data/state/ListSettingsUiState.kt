@@ -1,11 +1,11 @@
 package com.example.rireki.data.state
 
 data class ListSettingsUiState(
-    val listId: String = "",
-    val listName: String = "",
+    val id: String = "",
+    val newName: String = "",
     val admins: List<String> = listOf(),
-    val listPrivacy: String = "Privat",
-    var listPrivacyOptions: List<String> = listOf(
+    val privacy: String = "Privat",
+    var privacyOptions: List<String> = listOf(
         "Privat", "Öffentlich", "Geschlossen", "Bestätigung"
     ),
     var expandedDropdown: Boolean = false,

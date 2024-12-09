@@ -7,13 +7,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.model.HomeViewModel
-import com.example.rireki.data.state.HomeUiState
+import com.example.rireki.data.model.ProfileDeleteViewModel
+import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.ui.components.ListOverviewNotFound
 import com.example.rireki.ui.components.ListOverviewProfile
 import com.example.rireki.ui.components.ListOverviewTopBar
@@ -22,13 +25,18 @@ import com.example.rireki.ui.components.shared.ConfirmAlert
 @Composable
 fun ListOverviewScreen(
     homeViewModel: HomeViewModel = viewModel(),
-    homeUiState: HomeUiState,
+    profileDeleteViewModel: ProfileDeleteViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onNavigateSettings: () -> Unit,
     onNavigateAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val activeProfileList = homeUiState.lists.find { it.id == homeUiState.selectedListId }
+    val userUiState by userViewModel.uiState.collectAsState()
+    val profileDeleteUiState by profileDeleteViewModel.uiState.collectAsState()
+    val homeUiState by homeViewModel.uiState.collectAsState()
+
+    val activeProfileList = userUiState.userData.find { it.id == homeUiState.selectedListId }
 
     Scaffold(
         topBar = { ListOverviewTopBar(
@@ -55,33 +63,35 @@ fun ListOverviewScreen(
                     modifier = overviewModifier
                 ) {
                     items(activeProfileList.profiles) {
-                            profile ->
-                        ListOverviewProfile(
-                            profile = profile,
-                            onProfileRemoveClick = {
-                                homeViewModel.setProfileToRemoveFromList(
-                                    listId = activeProfileList.id,
-                                    profileName = profile.name
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
+                        profile ->
+                            ListOverviewProfile(
+                                profile = profile,
+                                onProfileRemoveClick = {
+                                    profileDeleteViewModel.setProfileToRemoveFromList(
+                                        listId = activeProfileList.id,
+                                        profileName = profile
+                                    )
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
                     }
                 }
-                if (activeProfileList.showRemoveProfile) {
+                if (profileDeleteUiState.showRemoveProfile) {
                     ConfirmAlert(
                         onConfirmRequest = {
-                            homeViewModel.removeProfileFromList(
+                            userViewModel.removeProfileFromList(
                                 listId = activeProfileList.id,
-                                profileName = activeProfileList.removeProfile
-                            )
+                                profileName = profileDeleteUiState.removeProfile
+                            ) {
+                                profileDeleteViewModel.unsetShowProfileRemove()
+                            }
                         },
-                        onDismissRequest = { homeViewModel.unsetShowProfileRemove() },
+                        onDismissRequest = { profileDeleteViewModel.unsetShowProfileRemove() },
                         title = R.string.overview_dialog_remove_title,
                         confirmText = R.string.overview_dialog_remove_confirm,
                         dismissText = R.string.overview_dialog_remove_dismiss,
-                        text = "Möchten Sie wirklich ${activeProfileList.removeProfile} von der Liste entfernen?"
+                        text = "Möchten Sie wirklich ${profileDeleteUiState.removeProfile} von der Liste entfernen?"
                     )
                 }
             } else ListOverviewNotFound(

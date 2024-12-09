@@ -10,6 +10,7 @@ import androidx.navigation.compose.navigation
 import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
+import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.ui.screens.HomeScreen
 import com.example.rireki.ui.screens.ListAddScreen
 import com.example.rireki.ui.screens.ListOverviewScreen
@@ -23,9 +24,7 @@ object HomeGraph
 object Home
 
 @Serializable
-data class ProfileListGraph(
-    val id: String
-)
+object ProfileListGraph
 
 @Serializable
 object ActiveProfileList
@@ -38,16 +37,13 @@ object Settings
 
 fun NavGraphBuilder.homeGraph(
     homeViewModel: HomeViewModel,
+    userViewModel: UserViewModel,
     settingsViewModel: ListSettingsViewModel,
     addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
 ) {
     val navigateToList: (String) -> Unit = {
-        navController.navigate(
-            ProfileListGraph(
-                id = it
-            )
-        )
+        navController.navigate(ProfileListGraph)
         homeViewModel.setSelectedList(
             selectedId = it
         )
@@ -59,6 +55,7 @@ fun NavGraphBuilder.homeGraph(
         composable<Home> {
             HomeScreen(
                 homeViewModel = homeViewModel,
+                userViewModel = userViewModel,
                 navigateToList = navigateToList
             )
         }
@@ -66,6 +63,7 @@ fun NavGraphBuilder.homeGraph(
             homeViewModel = homeViewModel,
             settingsViewModel = settingsViewModel,
             addProfileViewModel = addProfileViewModel,
+            userViewModel = userViewModel,
             navController = navController
         )
     }
@@ -73,6 +71,7 @@ fun NavGraphBuilder.homeGraph(
 
 fun NavGraphBuilder.profileListGraph(
     homeViewModel: HomeViewModel,
+    userViewModel: UserViewModel,
     settingsViewModel: ListSettingsViewModel,
     addProfileViewModel: AddProfileViewModel,
     navController: NavHostController
@@ -97,11 +96,9 @@ fun NavGraphBuilder.profileListGraph(
         startDestination = ActiveProfileList
     ) {
         composable<ActiveProfileList> {
-            val homeUiState by homeViewModel.uiState.collectAsState()
-
             ListOverviewScreen(
                 homeViewModel = homeViewModel,
-                homeUiState = homeUiState,
+                userViewModel = userViewModel,
                 onNavigateBack = navigateBackHome,
                 onNavigateSettings = onNavigateSettings,
                 onNavigateAdd = onNavigateAdd,
@@ -110,21 +107,20 @@ fun NavGraphBuilder.profileListGraph(
         composable<Settings> {
             val homeUiState by homeViewModel.uiState.collectAsState()
 
-            settingsViewModel.setListSettings(
-                homeViewModel.getListOfId(homeUiState.selectedListId)
-            )
+            val selectedList = userViewModel.getListFromId(homeUiState.selectedListId)
 
-            val settingsCopy = settingsViewModel.uiState.value.copy()
+            settingsViewModel.setListSettings(selectedList)
 
             ListSettingsScreen(
                 settingsViewModel = settingsViewModel,
-                settingsCopy = settingsCopy,
+                selectedList = selectedList,
                 onNavigateBack = navigateBackList,
                 onListDelete = {
-                    settingsViewModel.unshowListDeleteDialog()
-                    homeViewModel.removeList(it)
-                    navController.navigate(Home) {
-                        popUpTo(navController.graph.id)
+                    userViewModel.removeList(listId = it) {
+                        settingsViewModel.unshowListDeleteDialog()
+                        navController.navigate(Home) {
+                            popUpTo(navController.graph.id)
+                        }
                     }
                 },
                 modifier = Modifier
@@ -133,14 +129,15 @@ fun NavGraphBuilder.profileListGraph(
         composable<AddProfile> {
             ListAddScreen(
                 addProfileViewModel = addProfileViewModel,
+                homeViewModel = homeViewModel,
                 onAddClick = {
-                    name, residence ->
-                        homeViewModel.addProfileToList(
-                            profileName = name,
-                            profileResidence = residence
+                    listId, profileName ->
+                        userViewModel.addProfileToList(
+                            listId = listId,
+                            profileName = profileName,
+                            resetValues = { addProfileViewModel.resetProfileInputs() },
+                            navigateToOverview = navigateBackList
                         )
-                        addProfileViewModel.resetProfileInputs()
-                        navigateBackList()
                 },
                 onNavigationBack = navigateBackList
             )

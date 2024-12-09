@@ -1,9 +1,6 @@
 package com.example.rireki.data.model
 
 import androidx.lifecycle.ViewModel
-import com.example.rireki.data.dataclass.Profile
-import com.example.rireki.data.dataclass.ProfileList
-import com.example.rireki.data.dummyLists
 import com.example.rireki.data.enumclass.LIST_CREATE_ERROR
 import com.example.rireki.data.state.HomeUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,84 +12,15 @@ class HomeViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    init {
-        _uiState.update {
-            currentState -> currentState.copy(
-                lists = dummyLists
-            )
-        }
-    }
-
-    fun addProfileToList(profileName: String, profileResidence: String) {
-        val selectedId = uiState.value.selectedListId
-        val profileToAdd = Profile(
-            name = profileName,
-            residence = profileResidence
-        )
-
-        val newProfileLists = uiState.value.lists.map {
-            it.copy(
-                profiles = if (it.id == selectedId) it.profiles.plus(profileToAdd) else it.profiles
-            )
-        }
-
-        this.updateLists(newProfileLists)
-    }
-
     fun setSelectedList(selectedId: String) {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    selectedListId = selectedId
-                )
-        }
-    }
-
-    fun setProfileToRemoveFromList(listId: String, profileName: String) {
-        val newProfileLists = uiState.value.lists.map {
-            it.copy(
-                showRemoveProfile = listId == it.id,
-                removeProfile = if (it.id == listId) profileName else it.removeProfile
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedListId = selectedId
             )
         }
-
-        this.updateLists(newProfileLists)
     }
 
-    fun unsetShowProfileRemove() {
-        val newProfileLists = uiState.value.lists.map {
-            it.copy(
-                showRemoveProfile = false,
-                removeProfile = ""
-            )
-        }
-
-        this.updateLists(newProfileLists)
-    }
-
-    private fun updateLists(newLists: List<ProfileList>) {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    lists = newLists
-                )
-        }
-    }
-
-    fun removeProfileFromList(listId: String, profileName: String) {
-        val newProfilesList = uiState.value.lists.map {
-            val newSelectedProfiles = it.profiles.filter { profile -> profile.name != profileName }
-            it.copy(
-                profiles = if (it.id == listId) newSelectedProfiles else it.profiles,
-                showRemoveProfile = false,
-                removeProfile = ""
-            )
-        }
-
-        this.updateLists(newProfilesList)
-    }
-
-    private fun setErrorMessage(error: Int) {
+    fun setErrorMessage(error: Int) {
         val errorEnum: LIST_CREATE_ERROR = when(error) {
             1 -> LIST_CREATE_ERROR.NAME_NOT_AVAILABLE
             else -> LIST_CREATE_ERROR.NONE
@@ -104,43 +32,6 @@ class HomeViewModel: ViewModel() {
                     error = errorEnum
                 )
         }
-    }
-
-    fun removeList(listId: String) {
-        _uiState.update {
-            currentState ->
-                currentState.copy(
-                    lists = uiState.value.lists.filter {
-                        it.id != listId
-                    }
-                )
-        }
-    }
-
-    fun getListOfId(id: String): ProfileList {
-        return uiState.value.lists.find {
-            it.id == id
-        } ?: ProfileList()
-    }
-
-    fun addList(newList: ProfileList, openSnackbar: () -> Unit) {
-        val nameAvailable = uiState.value.lists.none {
-            it.name == newList.name
-        }
-
-        if (!nameAvailable) {
-            this.setErrorMessage(1)
-            return
-        }
-
-        _uiState.update {
-                currentState -> currentState.copy(
-                    lists = uiState.value.lists.plus(newList),
-                    newListName = ""
-                )
-        }
-        this.toggleIsOpenDialog()
-        openSnackbar()
     }
 
     fun updateNameInput(nameInput: String) {
@@ -155,7 +46,8 @@ class HomeViewModel: ViewModel() {
     fun toggleIsOpenDialog() {
         _uiState.update {
                 currentState -> currentState.copy(
-                    isOpenDialog = !uiState.value.isOpenDialog
+                    isOpenDialog = !uiState.value.isOpenDialog,
+                    newListName = ""
                 )
         }
     }

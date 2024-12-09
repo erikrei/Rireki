@@ -1,5 +1,6 @@
 package com.example.rireki.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.model.HomeViewModel
-import com.example.rireki.data.util.getProfileList
+import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.ui.components.HomeDialogAddList
 import com.example.rireki.ui.components.HomeFloatingActionButton
 import com.example.rireki.ui.components.HomeSingleList
@@ -30,10 +31,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel(),
     navigateToList: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val homeUiState by homeViewModel.uiState.collectAsState()
+    val user by userViewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val listCreatedMessage = stringResource(id = R.string.dialog_snackbar_created, homeUiState.newListName)
@@ -66,7 +69,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(paddingValues)
             ) {
-                items(homeUiState.lists) {
+                items(user.userData) {
                     HomeSingleList(
                         onListClick = { navigateToList(it.id) },
                         profileList = it,
@@ -85,9 +88,11 @@ fun HomeScreen(
                     listName = homeUiState.newListName,
                     onListNameChange = { homeViewModel.updateNameInput(it) },
                     onSubmit = {
-                        homeViewModel.addList(
-                            getProfileList(homeUiState.newListName)
-                        ) { showListCreatedSnackbar() }
+                        userViewModel.addList(
+                            listName = homeUiState.newListName,
+                            openSnackbar = { showListCreatedSnackbar() },
+                            onNameNotAvailable = { homeViewModel.setErrorMessage(1) }
+                        ) { homeViewModel.toggleIsOpenDialog() }
                     },
                     onDismissRequest = { homeViewModel.toggleIsOpenDialog() },
                     error = homeUiState.error,

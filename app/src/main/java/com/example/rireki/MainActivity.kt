@@ -11,6 +11,7 @@ import com.example.rireki.ui.theme.RirekiTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
+        val db = Firebase.firestore
 
         setContent {
             RirekiTheme {
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainRireki(
                         auth = auth,
-                        firebaseUser = auth.currentUser
+                        db = db
                     )
                 }
             }
