@@ -1,7 +1,9 @@
 package com.example.rireki.data.state
 
-import com.google.firebase.auth.FirebaseUser
+import com.example.rireki.data.dataclass.ProfileList
+import com.example.rireki.data.dataclass.UserInformation
 
 data class UserUiState(
-    val user: FirebaseUser? = null
+    val userInfo: UserInformation = UserInformation(),
+    val userData: List<ProfileList> = listOf()
 )

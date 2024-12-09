@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.rireki.R
 import com.example.rireki.data.dataclass.ProfileList
-import com.example.rireki.data.util.getReadableStringOfLocalDate
 import com.example.rireki.ui.components.shared.TopBar
 
 @Composable
@@ -148,7 +147,7 @@ fun HomeSingleList(
                 )
             }
             Text(
-                text = getReadableStringOfLocalDate(profileList.createdAt),
+                text = profileList.createdAt,
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier
                     .padding(

@@ -52,9 +52,8 @@ class ListSettingsViewModel : ViewModel() {
         _uiState.update {
             currentState ->
                 currentState.copy(
-                    listId = list.id,
-                    listName = list.name,
-                    listPrivacy = list.settings.listPrivacy,
+                    newName = list.name,
+                    privacy = list.settings.privacy,
                     admins = list.settings.admins
                 )
         }
@@ -64,7 +63,7 @@ class ListSettingsViewModel : ViewModel() {
         _uiState.update {
             currentState ->
                 currentState.copy(
-                    listName = listNameInput
+                    newName = listNameInput
                 )
         }
     }
@@ -73,7 +72,7 @@ class ListSettingsViewModel : ViewModel() {
         _uiState.update {
             currentState ->
                 currentState.copy(
-                    listPrivacy = privacy,
+                    privacy = privacy,
                     expandedDropdown = false,
                 )
         }

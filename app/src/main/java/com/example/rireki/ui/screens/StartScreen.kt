@@ -1,6 +1,5 @@
 package com.example.rireki.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +24,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.enumclass.START_LOADING_TYPE
 import com.example.rireki.data.model.StartViewModel
+import com.example.rireki.data.model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun StartScreen(
     startViewModel: StartViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel(),
     auth: FirebaseAuth,
+    db: FirebaseFirestore,
     navigateToHome: () -> Unit,
     navigateAuthentication: () -> Unit,
     modifier: Modifier = Modifier
@@ -39,11 +42,13 @@ fun StartScreen(
     val currentUser = auth.currentUser
 
     LaunchedEffect(currentUser) {
-        Log.i("StartScreen", "LOADING LAUNCHED EFFECT...")
         startViewModel.initProgress(
             isLoggedIn = currentUser != null,
             navigateToHome = navigateToHome,
-            navigateAuthentication = navigateAuthentication
+            navigateAuthentication = navigateAuthentication,
+            loadData = { userViewModel.getUserData {
+                startViewModel.setProgress(START_LOADING_TYPE.COMPLETE)
+            } }
         )
     }
 

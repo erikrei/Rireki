@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.rireki.R
-import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.ui.components.shared.NavigationBackArrow
 import com.example.rireki.ui.components.shared.TopBar
 
@@ -91,7 +90,7 @@ fun ListOverviewActions(
 @Composable
 fun ListOverviewProfile(
     onProfileRemoveClick: () -> Unit,
-    profile: Profile,
+    profile: String,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
@@ -113,7 +112,7 @@ fun ListOverviewProfile(
                     )
             )
             Text(
-                text = profile.name 
+                text = profile
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(

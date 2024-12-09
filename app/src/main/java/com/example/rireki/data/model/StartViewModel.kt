@@ -16,13 +16,14 @@ class StartViewModel : ViewModel() {
     suspend fun initProgress(
         isLoggedIn: Boolean,
         navigateToHome: () -> Unit,
-        navigateAuthentication: () -> Unit
+        navigateAuthentication: () -> Unit,
+        loadData: () -> Unit
     ) {
         delay(1000)
         if (isLoggedIn) {
             setProgress(START_LOADING_TYPE.LOAD)
             delay(1000)
-            setProgress(START_LOADING_TYPE.COMPLETE)
+            loadData()
             delay(1000)
             navigateToHome()
         } else {
@@ -34,7 +35,7 @@ class StartViewModel : ViewModel() {
         }
     }
 
-    private fun setProgress(
+    fun setProgress(
         loadingType: START_LOADING_TYPE
     ) {
         _uiState.update {
