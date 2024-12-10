@@ -10,6 +10,7 @@ import com.example.rireki.data.util.db.removeListInDatabase
 import com.example.rireki.data.util.db.updateListInDatabase
 import com.example.rireki.data.util.getProfileList
 import com.example.rireki.data.util.getProfileListFromId
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
@@ -19,43 +20,49 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class UserViewModel(
-    private val uid: String?,
+    private val auth: FirebaseAuth,
     private val db: FirebaseFirestore
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UserUiState())
     val uiState: StateFlow<UserUiState> = _uiState.asStateFlow()
 
     fun getUserData(
+        redirectToUsernameInput: () -> Unit,
+        redirectToHome: () -> Unit,
         setLoadingComplete: () -> Unit
     ) {
-        if (uid == null) return
-        val documentReference = db.collection("users").document(uid)
+        val authId = auth.currentUser?.uid ?: return
+        val documentReference = db.collection("users").document(authId)
 
         documentReference
             .get()
             .addOnCompleteListener {
                 document ->
                     val data = document.result.toObject<UserInformation>()
-                    if (data != null) this.setUserInfo(data)
-                    this.getListData(
-                        uid = uid,
-                        db = db,
-                        setLoadingComplete = setLoadingComplete
-                    )
+                    if (data != null) {
+                        this.setUserInfo(data)
+                        this.getListData(
+                            db = db,
+                            setLoadingComplete = {
+                                setLoadingComplete()
+                                redirectToHome()
+                            }
+                        )
+                    } else redirectToUsernameInput()
             }
             .addOnFailureListener {
                 Log.e("UserViewModel", it.message.toString())
             }
     }
 
+
     private fun getListData(
-        uid: String?,
         db: FirebaseFirestore,
         setLoadingComplete: () -> Unit
     ) {
-        if (uid == null) return
+        val authId = auth.currentUser?.uid ?: return
         val documentReference = db.collection("lists").whereArrayContains(
-            "follower", uid
+            "follower", authId
         )
 
         documentReference
@@ -66,6 +73,27 @@ class UserViewModel(
                 this.setUserData(data)
                 setLoadingComplete()
             }
+    }
+
+    fun registerUserInDBWithNames(
+        firstName: String,
+        lastName: String,
+        onComplete: () -> Unit = {},
+        onFailure: () -> Unit = {}
+    ) {
+        val authId = auth.currentUser?.uid ?: return
+
+        val userInfo = UserInformation(
+            firstName = firstName,
+            lastName = lastName
+        )
+
+        val docRef = db.collection("users").document(authId)
+
+        docRef
+            .set(userInfo)
+            .addOnCompleteListener { onComplete() }
+            .addOnFailureListener { onFailure() }
     }
 
     fun addList(
@@ -82,7 +110,7 @@ class UserViewModel(
         val newList = getProfileList(
             listName = listName,
             userName = "${uiState.value.userInfo.firstName} ${uiState.value.userInfo.lastName}",
-            userId = uid!!
+            userId = auth.uid!!
         )
 
         val newProfileLists = uiState.value.userData.plus(newList)

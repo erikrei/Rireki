@@ -42,8 +42,8 @@ class AuthViewModel : ViewModel() {
         password: String,
         coroutineScope: CoroutineScope,
         snackbarHostState: SnackbarHostState,
-        successText: String,
-        failureText: String
+        failureText: String,
+        onSuccessRegister: () -> Unit,
     ) {
         if (uiState.value.emailError != AUTH_ERROR.NONE || uiState.value.passwordError != AUTH_ERROR.NONE) this.resetErrors()
         if (this.checkInput(email, password)) return
@@ -52,12 +52,7 @@ class AuthViewModel : ViewModel() {
             .addOnCompleteListener {
                 this.setToastType(TOAST_TYPE.NONE)
                 if (it.isSuccessful) {
-                    coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = successText,
-                            withDismissAction = true
-                        )
-                    }
+                    onSuccessRegister()
                 } else {
                     this.setToastType(TOAST_TYPE.FAILURE)
                     coroutineScope.launch {
@@ -136,8 +131,8 @@ class AuthViewModel : ViewModel() {
     fun toggleIsLogin() {
         _uiState.update {
             currentState -> currentState.copy(
-                email = "",
-                password = "",
+//                email = "",
+//                password = "",
                 isLogin = !uiState.value.isLogin,
                 emailError = AUTH_ERROR.NONE,
                 passwordError = AUTH_ERROR.NONE

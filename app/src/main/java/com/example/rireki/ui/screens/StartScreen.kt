@@ -26,14 +26,13 @@ import com.example.rireki.data.enumclass.START_LOADING_TYPE
 import com.example.rireki.data.model.StartViewModel
 import com.example.rireki.data.model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun StartScreen(
     startViewModel: StartViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel(),
     auth: FirebaseAuth,
-    db: FirebaseFirestore,
+    navigateToUsernameInput: () -> Unit,
     navigateToHome: () -> Unit,
     navigateAuthentication: () -> Unit,
     modifier: Modifier = Modifier
@@ -44,11 +43,14 @@ fun StartScreen(
     LaunchedEffect(currentUser) {
         startViewModel.initProgress(
             isLoggedIn = currentUser != null,
-            navigateToHome = navigateToHome,
             navigateAuthentication = navigateAuthentication,
-            loadData = { userViewModel.getUserData {
-                startViewModel.setProgress(START_LOADING_TYPE.COMPLETE)
-            } }
+            loadData = { userViewModel.getUserData(
+                redirectToUsernameInput = navigateToUsernameInput,
+                redirectToHome = navigateToHome,
+                setLoadingComplete = {
+                    startViewModel.setProgress(START_LOADING_TYPE.COMPLETE)
+                }
+            ) }
         )
     }
 

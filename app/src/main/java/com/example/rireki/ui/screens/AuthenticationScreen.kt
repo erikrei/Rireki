@@ -31,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun AuthenticationScreen(
     auth: FirebaseAuth,
-    onSuccessLogin: () -> Unit,
+    onSuccessAuth: () -> Unit,
     authViewModel: AuthViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
@@ -49,7 +49,7 @@ fun AuthenticationScreen(
                 auth = auth,
                 email = authUiState.email,
                 password = authUiState.password,
-                onSuccessLogin = onSuccessLogin,
+                onSuccessLogin = onSuccessAuth,
                 coroutineScope = scope,
                 snackbarHostState = snackbarHostState,
                 failureText = failureTextLogin
@@ -61,9 +61,8 @@ fun AuthenticationScreen(
                 password = authUiState.password,
                 coroutineScope = scope,
                 snackbarHostState = snackbarHostState,
-                successText = successTextRegister,
                 failureText = failureTextRegister
-            )
+            ) { onSuccessAuth() }
         }
     }
 

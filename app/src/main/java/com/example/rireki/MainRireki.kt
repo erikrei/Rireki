@@ -10,11 +10,14 @@ import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.data.model.UserViewModel
+import com.example.rireki.data.model.UsernameInputViewModel
 import com.example.rireki.data.objects.Authentication
 import com.example.rireki.data.objects.Home
 import com.example.rireki.data.objects.Start
+import com.example.rireki.data.objects.UsernameInput
 import com.example.rireki.data.objects.homeGraph
 import com.example.rireki.data.objects.startGraph
+import com.example.rireki.data.objects.usernameInput
 import com.example.rireki.ui.screens.AuthenticationScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,11 +32,11 @@ fun MainRireki(
     navController: NavHostController = rememberNavController()
 ) {
     val userViewModel = UserViewModel(
-        uid = auth.uid,
+        auth = auth,
         db = db
     )
 
-    val onSuccessLogin: () -> Unit = {
+    val onSuccessAuth: () -> Unit = {
         navController.navigate(Start)
     }
 
@@ -45,23 +48,38 @@ fun MainRireki(
         navController.navigate(Home)
     }
 
+    val navigateToUsernameInput: () -> Unit = {
+        navController.navigate(UsernameInput)
+    }
+
     NavHost(
         navController = navController,
         startDestination = Start
     ) {
         startGraph(
             auth = auth,
-            db = db,
             userViewModel = userViewModel,
+            navigateToUsernameInput = navigateToUsernameInput,
             navigateToHome = onSuccessLoadUser,
             navigateAuthentication = onFailureLoadUser
         )
         composable<Authentication> {
             AuthenticationScreen(
                 auth = auth,
-                onSuccessLogin = onSuccessLogin
+                onSuccessAuth = onSuccessAuth
             )
         }
+        usernameInput(
+            usernameInputViewModel = UsernameInputViewModel(),
+            onCompleteRegister = {
+                firstName, lastName ->
+                    userViewModel.registerUserInDBWithNames(
+                        firstName = firstName,
+                        lastName = lastName,
+                        onComplete = onSuccessAuth
+                    )
+            }
+        )
         homeGraph(
             userViewModel = userViewModel,
             homeViewModel = homeViewModel,

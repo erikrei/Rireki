@@ -13,15 +13,15 @@ object Start
 
 fun NavGraphBuilder.startGraph(
     auth: FirebaseAuth,
-    db: FirebaseFirestore,
     userViewModel: UserViewModel,
+    navigateToUsernameInput: () -> Unit,
     navigateToHome: () -> Unit,
     navigateAuthentication: () -> Unit
 ) {
     composable<Start> {
         StartScreen(
             auth = auth,
-            db = db,
+            navigateToUsernameInput = navigateToUsernameInput,
             navigateToHome = navigateToHome,
             navigateAuthentication = navigateAuthentication,
             userViewModel = userViewModel,
