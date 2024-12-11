@@ -18,4 +18,8 @@ class ProfileDeleteViewModel: ViewModel() {
     fun unsetShowProfileRemove() {
         _uiState.update { it.copy(showRemoveProfile = false, removeProfile = "") }
     }
+
+    fun toggleUserLeave() {
+        _uiState.update { it.copy(userLeave = !uiState.value.userLeave) }
+    }
 }

@@ -48,6 +48,10 @@
     <string name="overview_dialog_remove_dismiss">Zurück</string>
     <string name="overview_dialog_not_found_title">Fehler</string>
     <string name="overview_dialog_not_found_text">Fehler beim Laden der ausgewählten Liste.</string>
+    <string name="overview_dialog_user_leave_title">Liste entfernen</string>
+    <string name="overview_dialog_user_leave_confirm">Entfernen</string>
+    <string name="overview_dialog_user_leave_dismiss">Zurück</string>
+    <string name="overview_dialog_user_leave_text">Möchten Sie die Liste wirklich entfernen?</string>
 
     <!--  Profilansicht  -->
     <string name="profile_view_profile_not_found_title">Profil nicht gefunden</string>

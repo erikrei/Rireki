@@ -8,8 +8,6 @@ fun removeListInDatabase(
     onComplete: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-
-
     val docRef = db.collection("lists").document(listId)
 
     docRef
