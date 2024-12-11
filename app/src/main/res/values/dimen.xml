@@ -50,6 +50,12 @@
     <dimen name="profile_view_age_residency_spacing">16dp</dimen>
     <dimen name="profile_view_prop_container_spacing">8dp</dimen>
 
+    <!--   Profil bearbeiten     -->
+    <dimen name="profile_edit_container_vertical_padding">16dp</dimen>
+    <dimen name="profile_edit_container_horizontal_padding">16dp</dimen>
+    <dimen name="profile_edit_container_component_spacing">16dp</dimen>
+    <dimen name="profile_edit_button_padding">16dp</dimen>
+
     <!--  Listeneinstellungen  -->
     <dimen name="settings_horizontal_padding">16dp</dimen>
     <dimen name="settings_vertical_padding">16dp</dimen>

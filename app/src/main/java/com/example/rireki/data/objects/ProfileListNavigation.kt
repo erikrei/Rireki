@@ -15,6 +15,7 @@ import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.ui.screens.ListAddScreen
 import com.example.rireki.ui.screens.ListOverviewScreen
 import com.example.rireki.ui.screens.ListSettingsScreen
+import com.example.rireki.ui.screens.ProfileViewEditScreen
 import com.example.rireki.ui.screens.ProfileViewScreen
 import kotlinx.serialization.Serializable
 
@@ -29,6 +30,12 @@ object Settings
 
 @Serializable
 data class ProfileView(
+    val listId: String,
+    val name: String
+)
+
+@Serializable
+data class ProfileViewEdit(
     val listId: String,
     val name: String
 )
@@ -64,6 +71,16 @@ fun NavGraphBuilder.profileListGraph(
             ))
     }
 
+    val onNavigateEdit: (String, String) -> Unit = {
+        listId, profileName ->
+            navController.navigate(
+                ProfileViewEdit(
+                    listId = listId,
+                    name = profileName
+                )
+            )
+    }
+
     navigation<ProfileListGraph>(
         startDestination = ActiveProfileList
     ) {
@@ -83,7 +100,17 @@ fun NavGraphBuilder.profileListGraph(
             ProfileViewScreen(
                 userViewModel = userViewModel,
                 profileToView = profileToView,
-                onNavigateBack = navigateBackList
+                onNavigateBack = navigateBackList,
+                onNavigateEdit = onNavigateEdit
+            )
+        }
+        composable<ProfileViewEdit> {
+            val profileViewEdit = it.toRoute<ProfileViewEdit>()
+
+            ProfileViewEditScreen(
+                profileViewEdit = profileViewEdit,
+                userViewModel = userViewModel,
+                onNavigateBack = onProfileClick
             )
         }
         composable<Settings> {

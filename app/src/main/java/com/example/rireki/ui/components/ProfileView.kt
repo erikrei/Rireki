@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,15 +28,41 @@ import com.example.rireki.ui.components.shared.TopBar
 @Composable
 fun ProfileViewTopBar(
     profileName: String,
+    isAdmin: Boolean,
     onNavigateBack: () -> Unit,
+    onNavigateEdit: (String, String) -> Unit,
+    selectedListId: String,
     modifier: Modifier = Modifier
 ) {
     TopBar(
         title = { ProfileViewTopBarTitle(title = profileName) },
-        actions = { /*TODO*/ },
+        actions = {
+            if (isAdmin)
+                ProfileViewTopBarActions(
+                    onProfileEdit = {
+                        onNavigateEdit(selectedListId, profileName)
+                    }
+                )
+        },
         navigationIcon = { NavigationBackArrow(onNavigateBack = onNavigateBack) },
         modifier = modifier
     )
+}
+
+@Composable
+fun ProfileViewTopBarActions(
+    onProfileEdit: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onProfileEdit,
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.edit_24),
+            contentDescription = null
+        )
+    }
 }
 
 @Composable
