@@ -43,6 +43,13 @@
     <dimen name="simple_list_inner_padding">16dp</dimen>
     <dimen name="simple_list_inner_component_padding">16dp</dimen>
 
+    <!--  Profilansicht  -->
+    <dimen name="profile_view_container_vertical_padding">16dp</dimen>
+    <dimen name="profile_view_container_horizontal_padding">16dp</dimen>
+    <dimen name="profile_view_container_spacing">16dp</dimen>
+    <dimen name="profile_view_age_residency_spacing">16dp</dimen>
+    <dimen name="profile_view_prop_container_spacing">8dp</dimen>
+
     <!--  Listeneinstellungen  -->
     <dimen name="settings_horizontal_padding">16dp</dimen>
     <dimen name="settings_vertical_padding">16dp</dimen>

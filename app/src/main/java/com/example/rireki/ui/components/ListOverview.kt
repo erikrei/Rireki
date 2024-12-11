@@ -89,12 +89,13 @@ fun ListOverviewActions(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOverviewProfile(
+    onProfileClick: () -> Unit,
     onProfileRemoveClick: () -> Unit,
     profile: String,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
-        onClick = { /*TODO*/ },
+        onClick = onProfileClick,
         modifier = modifier
     ) {
         Row(
