@@ -254,10 +254,53 @@ class UserViewModel(
         )
     }
 
+    fun editUser(
+        listId: String,
+        profileName: String,
+        newProfile: Profile,
+        onNavigateProfileView: () -> Unit
+    ) {
+        val list = uiState.value.userData.find { it.id == listId } ?: return
+
+        val updatedProfiles = list.profiles.map {
+            it.copy(
+                name = if (it.name == profileName) newProfile.name else it.name,
+                residency = if (it.name == profileName) newProfile.residency else it.residency,
+                age = if (it.name == profileName) newProfile.age else it.age,
+                description = if (it.name == profileName) newProfile.description else it.description
+            )
+        }
+
+        val updatedList = list.copy(
+            profiles = updatedProfiles
+        )
+
+        val newLists = uiState.value.userData.map {
+            it.copy(
+                profiles = if (it.id == listId) updatedProfiles else it.profiles
+            )
+        }
+
+        updateListInDatabase(
+            db = db,
+            list = updatedList,
+            onComplete = {
+                this.updateUiLists(newLists)
+                onNavigateProfileView()
+            }
+        )
+    }
+
     fun isUserAdmin(listId: String): Boolean {
         val list = uiState.value.userData.find { it.id == listId } ?: return false
 
         return list.settings.admins.contains(auth.uid)
+    }
+
+    fun getProfileFromListIdAndName(listId: String, profileName: String): Profile? {
+        val list = uiState.value.userData.find { it.id == listId } ?: return null
+
+        return list.profiles.find { it.name == profileName }
     }
 
     private fun updateUiLists(newLists: List<ProfileList>) {

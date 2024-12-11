@@ -57,6 +57,14 @@
     <string name="profile_view_profile_not_found_title">Profil nicht gefunden</string>
     <string name="profile_view_description_label">Personenbeschreibung</string>
 
+    <!--  Profilbearbeitung  -->
+    <string name="profile_edit_title">%s bearbeiten</string>
+    <string name="profile_edit_name_label">Name</string>
+    <string name="profile_edit_residency_label">Wohnort</string>
+    <string name="profile_edit_age_label">Alter</string>
+    <string name="profile_edit_description_label">Personenbeschreibung</string>
+    <string name="profile_edit_button_text">Profil bearbeiten</string>
+
     <!--  Listeneinstellungen  -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_label_name">Name der Liste</string>

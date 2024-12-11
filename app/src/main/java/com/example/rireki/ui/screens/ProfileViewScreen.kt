@@ -20,16 +20,22 @@ fun ProfileViewScreen(
     userViewModel: UserViewModel = viewModel(),
     profileToView: ProfileView,
     onNavigateBack: () -> Unit,
+    onNavigateEdit: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val userUiState by userViewModel.uiState.collectAsState()
     val profileList = userUiState.userData.find { it.id == profileToView.listId }
     val profile = profileList?.profiles?.find { it.name == profileToView.name }
 
+    val isAdmin = userViewModel.isUserAdmin(profileToView.listId)
+
     Scaffold(
         topBar = { ProfileViewTopBar(
             profileName = profile?.name ?: stringResource(id = R.string.profile_view_profile_not_found_title),
-            onNavigateBack = onNavigateBack
+            isAdmin = isAdmin,
+            onNavigateBack = onNavigateBack,
+            onNavigateEdit = onNavigateEdit,
+            selectedListId = profileToView.listId
         ) },
         modifier = modifier
     ) { paddingValues ->
