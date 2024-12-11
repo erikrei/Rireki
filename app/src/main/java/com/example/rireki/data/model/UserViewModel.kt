@@ -227,6 +227,39 @@ class UserViewModel(
         )
     }
 
+    fun leaveList(listId: String, onNavigateHome: () -> Unit) {
+        val authId = auth.currentUser?.uid ?: return
+
+        val list = uiState.value.userData.find {
+            it.id == listId
+        } ?: return
+
+        val updatedFollower = list.follower.minus(authId)
+
+        val updatedList = list.copy(
+            follower = updatedFollower
+        )
+
+        val newLists = uiState.value.userData.filter {
+            it.id != listId
+        }
+
+        updateListInDatabase(
+            db = db,
+            list = updatedList,
+            onComplete = {
+                this.updateUiLists(newLists = newLists)
+                onNavigateHome()
+            }
+        )
+    }
+
+    fun isUserAdmin(listId: String): Boolean {
+        val list = uiState.value.userData.find { it.id == listId } ?: return false
+
+        return list.settings.admins.contains(auth.uid)
+    }
+
     private fun updateUiLists(newLists: List<ProfileList>) {
         _uiState.update {
             currentState ->

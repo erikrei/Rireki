@@ -40,12 +40,16 @@ fun ListOverviewScreen(
 
     val activeProfileList = userUiState.userData.find { it.id == homeUiState.selectedListId }
 
+    val isUserAdmin = userViewModel.isUserAdmin(homeUiState.selectedListId)
+
     Scaffold(
         topBar = { ListOverviewTopBar(
+            isAdmin = isUserAdmin,
             listName = activeProfileList?.name ?: stringResource(id = R.string.overview_dialog_not_found_title),
             onNavigateBack = onNavigateBack,
             onNavigateSettings = onNavigateSettings,
-            onNavigateAdd = onNavigateAdd
+            onNavigateAdd = onNavigateAdd,
+            onLeaveListClick = { profileDeleteViewModel.toggleUserLeave() }
         ) },
         modifier = modifier
     ) {
@@ -67,6 +71,7 @@ fun ListOverviewScreen(
                     items(activeProfileList.profiles) {
                         profile ->
                             ListOverviewProfile(
+                                isAdmin = isUserAdmin,
                                 onProfileClick = {
                                     onProfileClick(
                                         homeUiState.selectedListId,
@@ -100,6 +105,21 @@ fun ListOverviewScreen(
                         confirmText = R.string.overview_dialog_remove_confirm,
                         dismissText = R.string.overview_dialog_remove_dismiss,
                         text = "Möchten Sie wirklich ${profileDeleteUiState.removeProfile} von der Liste entfernen?"
+                    )
+                }
+                if (profileDeleteUiState.userLeave) {
+                    ConfirmAlert(
+                        onConfirmRequest = {
+                            profileDeleteViewModel.toggleUserLeave()
+                            userViewModel.leaveList(homeUiState.selectedListId) {
+                                onNavigateBack()
+                            }
+                        },
+                        onDismissRequest = { profileDeleteViewModel.toggleUserLeave() },
+                        title = R.string.overview_dialog_user_leave_title,
+                        confirmText = R.string.overview_dialog_user_leave_confirm,
+                        dismissText = R.string.overview_dialog_user_leave_dismiss,
+                        text = stringResource(id = R.string.overview_dialog_user_leave_text)
                     )
                 }
             } else ListOverviewNotFound(

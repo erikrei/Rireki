@@ -26,10 +26,12 @@ import com.example.rireki.ui.components.shared.TopBar
 
 @Composable
 fun ListOverviewTopBar(
+    isAdmin: Boolean,
     listName: String,
     onNavigateBack: () -> Unit,
     onNavigateSettings: () -> Unit,
     onNavigateAdd: () -> Unit,
+    onLeaveListClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopBar(
@@ -39,10 +41,14 @@ fun ListOverviewTopBar(
         navigationIcon = { NavigationBackArrow(
             onNavigateBack = onNavigateBack
         ) },
-        actions = { ListOverviewActions(
-            onNavigateSettings = onNavigateSettings,
-            onNavigateAdd = onNavigateAdd
-        ) },
+        actions = {
+            if (isAdmin)
+                ListOverviewActionsAdmin(
+                    onNavigateSettings = onNavigateSettings,
+                    onNavigateAdd = onNavigateAdd
+                )
+            else ListOverviewActionsUser(onLeaveListClick = onLeaveListClick)
+        },
         modifier = modifier
     )
 }
@@ -59,7 +65,7 @@ fun ListOverviewTitle(
 }
 
 @Composable
-fun ListOverviewActions(
+fun ListOverviewActionsAdmin(
     onNavigateSettings: () -> Unit,
     onNavigateAdd: () -> Unit,
     modifier: Modifier = Modifier
@@ -86,9 +92,26 @@ fun ListOverviewActions(
     }
 }
 
+@Composable
+fun ListOverviewActionsUser(
+    onLeaveListClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onLeaveListClick,
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.logout_24),
+            contentDescription = null
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOverviewProfile(
+    isAdmin: Boolean,
     onProfileClick: () -> Unit,
     onProfileRemoveClick: () -> Unit,
     profile: String,
@@ -116,15 +139,16 @@ fun ListOverviewProfile(
                 text = profile
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                onClick = onProfileRemoveClick,
-                modifier = Modifier
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.remove_person_24),
-                    contentDescription = null,
-                )    
-            }
+            if (isAdmin)
+                IconButton(
+                    onClick = onProfileRemoveClick,
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.remove_person_24),
+                        contentDescription = null,
+                    )
+                }
         }
     }
 }
