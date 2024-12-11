@@ -14,6 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
+import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.ProfileDeleteViewModel
 import com.example.rireki.data.model.UserViewModel
@@ -27,6 +28,7 @@ fun ListOverviewScreen(
     homeViewModel: HomeViewModel = viewModel(),
     profileDeleteViewModel: ProfileDeleteViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel(),
+    onProfileClick: (String, String) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateSettings: () -> Unit,
     onNavigateAdd: () -> Unit,
@@ -65,11 +67,17 @@ fun ListOverviewScreen(
                     items(activeProfileList.profiles) {
                         profile ->
                             ListOverviewProfile(
-                                profile = profile,
+                                onProfileClick = {
+                                    onProfileClick(
+                                        homeUiState.selectedListId,
+                                        profile.name
+                                    )
+                                },
+                                profile = profile.name,
                                 onProfileRemoveClick = {
                                     profileDeleteViewModel.setProfileToRemoveFromList(
                                         listId = activeProfileList.id,
-                                        profileName = profile
+                                        profileName = profile.name
                                     )
                                 },
                                 modifier = Modifier
@@ -82,7 +90,7 @@ fun ListOverviewScreen(
                         onConfirmRequest = {
                             userViewModel.removeProfileFromList(
                                 listId = activeProfileList.id,
-                                profileName = profileDeleteUiState.removeProfile
+                                profile = Profile(name = profileDeleteUiState.removeProfile)
                             ) {
                                 profileDeleteViewModel.unsetShowProfileRemove()
                             }

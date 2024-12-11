@@ -1,6 +1,6 @@
-package com.example.rireki.data.state
+package com.example.rireki.data.dataclass
 
-data class AddProfileUiState(
+data class Profile(
     val name: String = "",
     val residency: String = "",
     val age: String = "",

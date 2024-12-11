@@ -24,7 +24,25 @@ class AddProfileViewModel : ViewModel() {
         _uiState.update {
             currentState ->
                 currentState.copy(
-                    residence = residenceInput
+                    residency = residenceInput
+                )
+        }
+    }
+
+    fun changeProfileAge(ageInput: String) {
+        _uiState.update {
+                currentState ->
+                    currentState.copy(
+                        age = ageInput
+                    )
+        }
+    }
+
+    fun changeProfileDescription(descriptionInput: String) {
+        _uiState.update {
+            currentState ->
+                currentState.copy(
+                    description = descriptionInput
                 )
         }
     }
@@ -34,7 +52,9 @@ class AddProfileViewModel : ViewModel() {
             currentState ->
                 currentState.copy(
                     name = "",
-                    residence = ""
+                    residency = "",
+                    age = "",
+                    description = ""
                 )
         }
     }

@@ -49,6 +49,10 @@
     <string name="overview_dialog_not_found_title">Fehler</string>
     <string name="overview_dialog_not_found_text">Fehler beim Laden der ausgewählten Liste.</string>
 
+    <!--  Profilansicht  -->
+    <string name="profile_view_profile_not_found_title">Profil nicht gefunden</string>
+    <string name="profile_view_description_label">Personenbeschreibung</string>
+
     <!--  Listeneinstellungen  -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_label_name">Name der Liste</string>
@@ -64,12 +68,12 @@
     <string name="settings_category_admin">Admins</string>
     <string name="settings_category_danger">Gefahrenzone</string>
 
-
-
     <!--  Profil hinzufügen  -->
     <string name="add_title">Steckbrief hinzufügen</string>
     <string name="add_label_name">Name des Steckbriefs</string>
     <string name="add_upload_text">Bild hinzufügen</string>
     <string name="add_label_residence">Wohnort</string>
+    <string name="add_label_age">Alter</string>
+    <string name="add_label_description">Personenbeschreibung</string>
     <string name="add_button">Hinzufügen</string>
 </resources>

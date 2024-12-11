@@ -2,6 +2,7 @@ package com.example.rireki.data.model
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.dataclass.UserInformation
 import com.example.rireki.data.state.UserUiState
@@ -163,7 +164,7 @@ class UserViewModel(
 
     fun removeProfileFromList(
         listId: String,
-        profileName: String,
+        profile: Profile,
         unsetDialog: () -> Unit
     ) {
         val list = getProfileListFromId(
@@ -171,13 +172,15 @@ class UserViewModel(
             listId = listId
         ) ?: return
 
+        val newProfiles = list.profiles.filter { it.name != profile.name }
+
         val updatedList = list.copy(
-            profiles = list.profiles.minus(profileName)
+            profiles = newProfiles
         )
 
         val newLists = uiState.value.userData.map {
             it.copy(
-                profiles = if (it.id == listId) it.profiles.minus(profileName) else it.profiles
+                profiles = if (it.id == listId) newProfiles else it.profiles
             )
         }
 
@@ -193,7 +196,7 @@ class UserViewModel(
 
     fun addProfileToList(
         listId: String,
-        profileName: String,
+        profile: Profile,
         resetValues: () -> Unit,
         navigateToOverview: () -> Unit,
     ) {
@@ -201,13 +204,15 @@ class UserViewModel(
             it.id == listId
         } ?: return
 
+        val newProfiles = list.profiles.plus(profile)
+
         val updatedList = list.copy(
-            profiles = list.profiles.plus(profileName)
+            profiles = newProfiles
         )
 
         val newLists = uiState.value.userData.map {
             it.copy(
-                profiles = if (it.id == listId) it.profiles.plus(profileName) else it.profiles
+                profiles = if (it.id == listId) newProfiles else it.profiles
             )
         }
 

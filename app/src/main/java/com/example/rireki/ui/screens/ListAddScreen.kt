@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
+import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.model.AddProfileViewModel
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.ui.components.ListAddButton
@@ -24,7 +25,7 @@ fun ListAddScreen(
     addProfileViewModel: AddProfileViewModel = viewModel(),
     homeViewModel: HomeViewModel = viewModel(),
     onNavigationBack: () -> Unit,
-    onAddClick: (String, String) -> Unit,
+    onAddClick: (String, Profile) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val profileValues by addProfileViewModel.uiState.collectAsState()
@@ -38,9 +39,17 @@ fun ListAddScreen(
         },
         bottomBar = {
             ListAddButton(
-//                enabled = profileValues.name.isNotEmpty() && profileValues.residence.isNotEmpty(),
-                enabled = profileValues.name.isNotEmpty(),
-                onAddClick = { onAddClick(homeUiState.selectedListId, profileValues.name) },
+                enabled =
+                    profileValues.name.isNotEmpty() &&
+                    profileValues.residency.isNotEmpty() &&
+                    profileValues.age.isNotEmpty() &&
+                    profileValues.description.isNotEmpty(),
+                onAddClick = { onAddClick(homeUiState.selectedListId, Profile(
+                    name = profileValues.name,
+                    residency = profileValues.residency,
+                    age = profileValues.age,
+                    description = profileValues.description
+                )) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -73,11 +82,21 @@ fun ListAddScreen(
                     inputValue = profileValues.name,
                     onValueChange = { addProfileViewModel.changeProfileName(it) }
                 )
-//                LabelWithInput(
-//                    label = R.string.add_label_residence,
-//                    inputValue = profileValues.residence,
-//                    onValueChange = { addProfileViewModel.changeProfileResidence(it) }
-//                )
+                LabelWithInput(
+                    label = R.string.add_label_residence,
+                    inputValue = profileValues.residency,
+                    onValueChange = { addProfileViewModel.changeProfileResidence(it) }
+                )
+                LabelWithInput(
+                    label = R.string.add_label_age,
+                    inputValue = profileValues.age,
+                    onValueChange = { addProfileViewModel.changeProfileAge(it) }
+                )
+                LabelWithInput(
+                    label = R.string.add_label_description,
+                    inputValue = profileValues.description,
+                    onValueChange = { addProfileViewModel.changeProfileDescription(it) }
+                )
             }
     }
 }

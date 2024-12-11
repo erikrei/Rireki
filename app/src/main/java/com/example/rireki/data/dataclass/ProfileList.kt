@@ -5,7 +5,7 @@ data class ProfileList(
     val name: String = "",
     val createdFrom: String = "",
     val createdAt: String = "",
-    val profiles: List<String> = listOf(),
+    val profiles: List<Profile> = listOf(),
     val follower: List<String> = listOf(),
     val settings: ListSettings = ListSettings()
 )
