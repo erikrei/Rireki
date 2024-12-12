@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -90,6 +92,24 @@ fun HomeSnackbar(
     ) {
         Snackbar(
             snackbarData = it,
+        )
+    }
+}
+
+@Composable
+fun HomeShareUserId(
+    onShareClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onShareClick,
+        shape = RectangleShape,
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(id = R.string.home_share_user_id),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold
         )
     }
 }

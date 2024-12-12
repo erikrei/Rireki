@@ -1,5 +1,7 @@
 package com.example.rireki.data.model
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.rireki.data.dataclass.Admin
@@ -28,6 +30,18 @@ class UserViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UserUiState())
     val uiState: StateFlow<UserUiState> = _uiState.asStateFlow()
+
+    fun shareUserId(context: Context) {
+        val sendIntent: Intent = Intent().apply {
+            type = "text/plain"
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Das ist meine (${getFullNameOfUser()}) BenutzerID: ${auth.uid}")
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+
+        context.startActivity(shareIntent)
+    }
 
     fun getUserData(
         redirectToUsernameInput: () -> Unit,
@@ -58,6 +72,9 @@ class UserViewModel(
             }
     }
 
+    private fun getFullNameOfUser(): String {
+        return "${uiState.value.userInfo.firstName} ${uiState.value.userInfo.lastName}"
+    }
 
     private fun getListData(
         db: FirebaseFirestore,
@@ -327,6 +344,39 @@ class UserViewModel(
             onComplete = {
                 this.updateUiLists(newLists)
                 onNavigateProfileView()
+            }
+        )
+    }
+
+    fun addUserToList(
+        listId: String,
+        userToAddId: String,
+        unshowDialog: () -> Unit,
+        onComplete: () -> Unit
+    ) {
+        val list = uiState.value.userData.find {
+            it.id == listId
+        } ?: return
+
+        val updatedFollower = list.follower.plus(userToAddId)
+
+        val updatedList = list.copy(
+            follower = updatedFollower
+        )
+
+        val newLists = uiState.value.userData.map {
+            it.copy(
+                follower = if (it.id == listId) updatedFollower else it.follower
+            )
+        }
+
+        updateListInDatabase(
+            db = db,
+            list = updatedList,
+            onComplete = {
+                this.updateUiLists(newLists = newLists)
+                unshowDialog()
+                onComplete()
             }
         )
     }

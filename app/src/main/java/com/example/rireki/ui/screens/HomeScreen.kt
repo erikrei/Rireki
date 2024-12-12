@@ -1,10 +1,10 @@
 package com.example.rireki.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -13,15 +13,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.model.HomeViewModel
 import com.example.rireki.data.model.UserViewModel
 import com.example.rireki.ui.components.HomeDialogAddList
 import com.example.rireki.ui.components.HomeFloatingActionButton
+import com.example.rireki.ui.components.HomeShareUserId
 import com.example.rireki.ui.components.HomeSingleList
 import com.example.rireki.ui.components.HomeSnackbar
 import com.example.rireki.ui.components.HomeTopBar
@@ -49,7 +52,9 @@ fun HomeScreen(
             )
         }
     }
-    
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = { HomeTopBar() },
         floatingActionButton = {
@@ -69,6 +74,17 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(paddingValues)
             ) {
+                item {
+                    HomeShareUserId(
+                        onShareClick = {
+                            userViewModel.shareUserId(context = context)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
+                    Divider()
+                }
                 items(user.userData) {
                     HomeSingleList(
                         onListClick = { navigateToList(it.id) },

@@ -133,6 +133,14 @@ fun NavGraphBuilder.profileListGraph(
                         )
                         hideDialog()
                 },
+                onUserAdd = {
+                    userId, unshowDialog ->
+                        userViewModel.addUserToList(
+                            listId = homeUiState.selectedListId,
+                            userToAddId = userId,
+                            unshowDialog = unshowDialog
+                        ) { navigateBackList() }
+                },
                 onListDelete = {
                     userViewModel.removeList(listId = it) {
                         settingsViewModel.unshowListDeleteDialog()

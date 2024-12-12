@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -141,6 +142,7 @@ fun ListSettingsPrivacy(
 fun ListSettingsMemberOverview(
     member: List<String>,
     admins: List<Admin>,
+    onUserAddClick: () -> Unit,
     onAdminAddClick: (String) -> Unit,
     onAdminRemoveClick: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -151,10 +153,13 @@ fun ListSettingsMemberOverview(
 
     ListSettingsCategory(
         category = stringResource(id = R.string.settings_category_member),
-        actions = { IconButton(onClick = toggleShowMember) {
-            if (showMember) Icon(painter = painterResource(id = R.drawable.arrow_drop_up_24), contentDescription = null)
-            else Icon(painter = painterResource(id = R.drawable.arrow_drop_down_24), contentDescription = null)
-        } },
+        actions = {
+            ListSettingsMemberOverviewActions(
+                showMember = showMember,
+                onToggleShowMember = toggleShowMember,
+                onShowUserAdd = onUserAddClick
+            )
+        },
         modifier = modifier
     ) {
         AnimatedVisibility(
@@ -176,6 +181,34 @@ fun ListSettingsMemberOverview(
                         )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ListSettingsMemberOverviewActions(
+    showMember: Boolean,
+    onToggleShowMember: () -> Unit,
+    onShowUserAdd: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        IconButton(
+            onClick = onShowUserAdd
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.add_24),
+                contentDescription = null
+            )
+        }
+        IconButton(
+            onClick = onToggleShowMember
+        ) {
+            if (showMember) Icon(painter = painterResource(id = R.drawable.arrow_drop_up_24), contentDescription = null)
+            else Icon(painter = painterResource(id = R.drawable.arrow_drop_down_24), contentDescription = null)
         }
     }
 }
@@ -208,6 +241,73 @@ fun ListSettingsMember(
                     contentDescription = null
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun ListSettingsMemberAddDialog(
+    userInput: String,
+    dialogText: String,
+    onUserInputChange: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+    onConfirmRequest: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Card(
+            modifier = modifier
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dialog_card_inner_spacing)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.dialog_card_inner_padding))
+            ) {
+                Text(
+                    text = stringResource(id = R.string.settings_user_add_dialog_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                Text(text = dialogText)
+                LabelWithInput(
+                    label = R.string.settings_user_add_input_label,
+                    inputValue = userInput,
+                    onValueChange = onUserInputChange
+                )
+                ListSettingsMemberAddDialogButtons(
+                    onConfirm = onConfirmRequest,
+                    onDismiss = onDismissRequest,
+                    confirmEnabled = userInput.isNotEmpty(),
+                    modifier = Modifier.align(Alignment.End)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ListSettingsMemberAddDialogButtons(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    confirmEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+    ) {
+        TextButton(
+            onClick = onDismiss
+        ) {
+            Text(text = stringResource(id = R.string.settings_delete_dismiss).uppercase())
+        }
+        TextButton(
+            onClick = onConfirm,
+            enabled = confirmEnabled
+        ) {
+            Text(text = stringResource(id = R.string.settings_user_add_dialog_confirm).uppercase())
         }
     }
 }
