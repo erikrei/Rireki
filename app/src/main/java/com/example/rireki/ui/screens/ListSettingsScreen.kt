@@ -2,6 +2,7 @@ package com.example.rireki.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,12 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.model.ListSettingsViewModel
 import com.example.rireki.ui.components.ListSettingsDanger
 import com.example.rireki.ui.components.ListSettingsGeneral
+import com.example.rireki.ui.components.ListSettingsMemberAddDialog
 import com.example.rireki.ui.components.ListSettingsMemberOverview
 import com.example.rireki.ui.components.ListSettingsPrivacy
 import com.example.rireki.ui.components.ListSettingsPrivacyDialog
@@ -28,6 +31,7 @@ fun ListSettingsScreen(
     settingsViewModel: ListSettingsViewModel = viewModel(),
     selectedList: ProfileList,
     onAdminOperation: (String, String, () -> Unit) -> Unit,
+    onUserAdd: (String, () -> Unit) -> Unit,
     onNavigateBack: () -> Unit,
     onListDelete: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -66,6 +70,7 @@ fun ListSettingsScreen(
                 ListSettingsMemberOverview(
                     member = selectedList.follower,
                     admins = selectedList.settings.admins,
+                    onUserAddClick = { settingsViewModel.showUserAddDialog() },
                     onAdminAddClick = {
                         adminToAdd ->
                             settingsViewModel.showAdminAddDialog(adminToAdd = adminToAdd)
@@ -121,6 +126,16 @@ fun ListSettingsScreen(
                 confirmText = R.string.settings_admin_remove_confirm,
                 dismissText = R.string.settings_delete_dismiss,
                 text = "Möchten Sie ${settings.dialogAdmin} als Admin entfernen?"
+            )
+        }
+        if (settings.expandedUserAdd) {
+            ListSettingsMemberAddDialog(
+                userInput = settings.userAdd,
+                dialogText = stringResource(id = R.string.settings_user_add_dialog_text),
+                onUserInputChange = { settingsViewModel.changeUserAddInput(it) },
+                onConfirmRequest = { onUserAdd(settings.userAdd) { settingsViewModel.unshowUserAddDialog()} },
+                onDismissRequest = { settingsViewModel.unshowUserAddDialog() },
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

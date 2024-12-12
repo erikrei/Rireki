@@ -12,6 +12,18 @@ class ListSettingsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ListSettingsUiState())
     val uiState: StateFlow<ListSettingsUiState> = _uiState.asStateFlow()
 
+    fun changeUserAddInput(userAddInput: String) {
+        _uiState.update { it.copy(userAdd = userAddInput) }
+    }
+
+    fun showUserAddDialog() {
+        _uiState.update { it.copy(expandedUserAdd = true) }
+    }
+
+    fun unshowUserAddDialog() {
+        _uiState.update { it.copy(expandedUserAdd = false, userAdd = "") }
+    }
+
     fun showAdminAddDialog(adminToAdd: String) {
         _uiState.update { it.copy(expandedAdminAdd = true, dialogAdmin = adminToAdd) }
     }

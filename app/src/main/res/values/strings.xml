@@ -34,6 +34,9 @@
     <string name="auth_register_failure">Benutzer konnte nicht erstellt werden.</string>
     <string name="auth_login_failure">Authentifizierung fehlgeschlagen.</string>
 
+    <!--  Startseite  -->
+    <string name="home_share_user_id">BenutzerID teilen</string>
+
     <!--  Neue Liste Dialog  -->
     <string name="dialog_title">Liste hinzufügen</string>
     <string name="dialog_field_label">Listenname eingeben</string>
@@ -78,6 +81,11 @@
     <string name="settings_admin_add_confirm">Hinzufügen</string>
     <string name="settings_admin_remove_title">Admin entfernen</string>
     <string name="settings_admin_remove_confirm">Entfernen</string>
+    <string name="settings_user_add_dialog_title">Benutzer hinzufügen</string>
+    <string name="settings_user_add_dialog_confirm">Hinzufügen</string>
+    <string name="settings_user_add_input_label">BenutzerID</string>
+    <string name="settings_user_add_dialog_text">Geben Sie die BenutzerID des Benutzers ein, den
+    Sie zu dieser Liste hinzufügen möchten.</string>
     <!--  Listeneinstellungen Kategorien  -->
     <string name="settings_category_general">Generelles</string>
     <string name="settings_category_privacy">Privatsphäre</string>

@@ -10,5 +10,7 @@ data class ListSettingsUiState(
     var expandedListDelete: Boolean = false,
     val expandedAdminAdd: Boolean = false,
     val expandedAdminRemove: Boolean = false,
-    val dialogAdmin: String = ""
+    val dialogAdmin: String = "",
+    val expandedUserAdd: Boolean = false,
+    val userAdd: String = ""
 )
