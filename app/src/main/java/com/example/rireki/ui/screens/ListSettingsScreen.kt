@@ -2,7 +2,6 @@ package com.example.rireki.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,12 +15,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rireki.R
 import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.model.ListSettingsViewModel
-import com.example.rireki.data.util.checkIfSettingsEqual
 import com.example.rireki.ui.components.ListSettingsDanger
 import com.example.rireki.ui.components.ListSettingsGeneral
+import com.example.rireki.ui.components.ListSettingsMemberOverview
 import com.example.rireki.ui.components.ListSettingsPrivacy
 import com.example.rireki.ui.components.ListSettingsPrivacyDialog
-import com.example.rireki.ui.components.ListSettingsSaveButton
 import com.example.rireki.ui.components.ListSettingsTopBar
 import com.example.rireki.ui.components.shared.ConfirmAlert
 
@@ -29,6 +27,7 @@ import com.example.rireki.ui.components.shared.ConfirmAlert
 fun ListSettingsScreen(
     settingsViewModel: ListSettingsViewModel = viewModel(),
     selectedList: ProfileList,
+    onAdminOperation: (String, String, () -> Unit) -> Unit,
     onNavigateBack: () -> Unit,
     onListDelete: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -39,19 +38,6 @@ fun ListSettingsScreen(
         topBar = { ListSettingsTopBar(
             onNavigateBack = onNavigateBack
         ) },
-        bottomBar = {
-            ListSettingsSaveButton(
-                onClick = { /*TODO*/ },
-                enabled = !checkIfSettingsEqual(selectedList.name, selectedList.settings, settings),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = dimensionResource(id = R.dimen.settings_bottom_bar_padding),
-                        end = dimensionResource(id = R.dimen.settings_bottom_bar_padding),
-                        bottom = dimensionResource(id = R.dimen.settings_bottom_bar_padding)
-                    )
-            )
-        },
         modifier = modifier
     ) {
         paddingValues ->
@@ -77,6 +63,18 @@ fun ListSettingsScreen(
                     showDropdown = settings.expandedDropdown,
                     onDropdownOpen = { settingsViewModel.showPrivacyDialog() }
                 )
+                ListSettingsMemberOverview(
+                    member = selectedList.follower,
+                    admins = selectedList.settings.admins,
+                    onAdminAddClick = {
+                        adminToAdd ->
+                            settingsViewModel.showAdminAddDialog(adminToAdd = adminToAdd)
+                    },
+                    onAdminRemoveClick = {
+                        adminToRemove ->
+                            settingsViewModel.showAdminRemoveDialog(adminToRemove = adminToRemove)
+                    }
+                )
                 ListSettingsDanger(
                     onShowListDeleteDialog = { settingsViewModel.showListDeleteDialog() },
                 )
@@ -95,8 +93,34 @@ fun ListSettingsScreen(
                 onDismissRequest = { settingsViewModel.unshowListDeleteDialog() },
                 title = R.string.settings_delete_list_title,
                 confirmText = R.string.settings_delete_list_confirm,
-                dismissText = R.string.settings_delete_list_dismiss,
+                dismissText = R.string.settings_delete_dismiss,
                 text = "Möchten Sie die Liste ${settings.newName} wirklich löschen?"
+            )
+        }
+        if (settings.expandedAdminAdd) {
+            ConfirmAlert(
+                onConfirmRequest = { onAdminOperation(
+                    settings.dialogAdmin,
+                    "add"
+                ) { settingsViewModel.unshowAdminAddDialog() } },
+                onDismissRequest = { settingsViewModel.unshowAdminAddDialog() },
+                title = R.string.settings_admin_add_title,
+                confirmText = R.string.settings_admin_add_confirm,
+                dismissText = R.string.settings_delete_dismiss,
+                text = "Möchten Sie ${settings.dialogAdmin} als Admin hinzufügen?"
+            )
+        }
+        if (settings.expandedAdminRemove) {
+            ConfirmAlert(
+                onConfirmRequest = { onAdminOperation(
+                    settings.dialogAdmin,
+                    "remove"
+                ) { settingsViewModel.unshowAdminRemoveDialog() }},
+                onDismissRequest = { settingsViewModel.unshowAdminRemoveDialog() },
+                title = R.string.settings_admin_remove_title,
+                confirmText = R.string.settings_admin_remove_confirm,
+                dismissText = R.string.settings_delete_dismiss,
+                text = "Möchten Sie ${settings.dialogAdmin} als Admin entfernen?"
             )
         }
     }

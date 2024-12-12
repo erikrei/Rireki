@@ -72,12 +72,16 @@
     <string name="settings_delete_list_title">Liste löschen</string>
     <string name="settings_label_privacy">Listenbeitritt</string>
     <string name="settings_delete_list_confirm">Löschen</string>
-    <string name="settings_delete_list_dismiss">Zurück</string>
+    <string name="settings_delete_dismiss">Zurück</string>
     <string name="settings_save_button">Änderungen speichern</string>
+    <string name="settings_admin_add_title">Admin hinzufügen</string>
+    <string name="settings_admin_add_confirm">Hinzufügen</string>
+    <string name="settings_admin_remove_title">Admin entfernen</string>
+    <string name="settings_admin_remove_confirm">Entfernen</string>
     <!--  Listeneinstellungen Kategorien  -->
     <string name="settings_category_general">Generelles</string>
     <string name="settings_category_privacy">Privatsphäre</string>
-    <string name="settings_category_admin">Admins</string>
+    <string name="settings_category_member">Mitglieder</string>
     <string name="settings_category_danger">Gefahrenzone</string>
 
     <!--  Profil hinzufügen  -->

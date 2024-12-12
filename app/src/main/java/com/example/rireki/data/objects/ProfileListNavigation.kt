@@ -124,6 +124,15 @@ fun NavGraphBuilder.profileListGraph(
                 settingsViewModel = settingsViewModel,
                 selectedList = selectedList,
                 onNavigateBack = navigateBackList,
+                onAdminOperation = {
+                    admin, operation, hideDialog ->
+                        userViewModel.changeAdminsOfList(
+                            listId = homeUiState.selectedListId,
+                            admin = admin,
+                            operation = operation
+                        )
+                        hideDialog()
+                },
                 onListDelete = {
                     userViewModel.removeList(listId = it) {
                         settingsViewModel.unshowListDeleteDialog()

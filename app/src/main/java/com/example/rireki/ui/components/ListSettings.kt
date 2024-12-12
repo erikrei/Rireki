@@ -1,6 +1,7 @@
 package com.example.rireki.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,18 +9,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.example.rireki.R
+import com.example.rireki.data.dataclass.Admin
 import com.example.rireki.ui.components.shared.LabelWithDropdown
 import com.example.rireki.ui.components.shared.LabelWithIconButton
 import com.example.rireki.ui.components.shared.LabelWithInput
@@ -129,6 +138,81 @@ fun ListSettingsPrivacy(
 }
 
 @Composable
+fun ListSettingsMemberOverview(
+    member: List<String>,
+    admins: List<Admin>,
+    onAdminAddClick: (String) -> Unit,
+    onAdminRemoveClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var showMember by remember { mutableStateOf(false) }
+
+    val toggleShowMember: () -> Unit = { showMember = !showMember }
+
+    ListSettingsCategory(
+        category = stringResource(id = R.string.settings_category_member),
+        actions = { IconButton(onClick = toggleShowMember) {
+            if (showMember) Icon(painter = painterResource(id = R.drawable.arrow_drop_up_24), contentDescription = null)
+            else Icon(painter = painterResource(id = R.drawable.arrow_drop_down_24), contentDescription = null)
+        } },
+        modifier = modifier
+    ) {
+        AnimatedVisibility(
+            visible = showMember
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.settings_member_component_spacing)
+                )
+            ) {
+                member.forEach {
+                    member ->
+                        ListSettingsMember(
+                            member = member,
+                            isAdmin = admins.find { it.userId == member } != null,
+                            onAdminAddClick = { onAdminAddClick(member) },
+                            onAdminRemoveClick = { onAdminRemoveClick(member) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ListSettingsMember(
+    member: String,
+    isAdmin: Boolean,
+    onAdminAddClick: () -> Unit = {},
+    onAdminRemoveClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    ElevatedCard(
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.settings_member_component_spacing))
+        ) {
+            Text(text = member)
+            IconButton(
+                onClick = if (isAdmin) onAdminRemoveClick else onAdminAddClick
+            ) {
+                Icon(
+                    painter = if (isAdmin) painterResource(id = R.drawable.remove_admin_24)
+                        else painterResource(id = R.drawable.add_admin_24),
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun ListSettingsDanger(
     onShowListDeleteDialog: () -> Unit,
     modifier: Modifier = Modifier
@@ -205,23 +289,6 @@ fun ListSettingsPrivacyOption(
         Text(
             text = option,
             color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    }
-}
-
-@Composable
-fun ListSettingsSaveButton(
-    onClick: () -> Unit,
-    enabled: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(id = R.string.settings_save_button)
         )
     }
 }

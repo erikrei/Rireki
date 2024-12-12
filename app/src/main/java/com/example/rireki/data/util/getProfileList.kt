@@ -1,5 +1,6 @@
 package com.example.rireki.data.util
 
+import com.example.rireki.data.dataclass.Admin
 import com.example.rireki.data.dataclass.ListSettings
 import com.example.rireki.data.dataclass.ProfileList
 import java.time.LocalDate
@@ -11,7 +12,7 @@ fun getProfileList(listName: String, userName: String, userId: String): ProfileL
         createdAt = getReadableStringOfLocalDate(LocalDate.now()),
         follower = listOf(userId),
         settings = ListSettings(
-            admins = listOf(userId)
+            admins = listOf(Admin(userId = userId, userName = userName))
         )
     )
 }

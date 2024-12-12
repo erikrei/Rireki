@@ -2,6 +2,8 @@ package com.example.rireki.data.model
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.rireki.data.dataclass.Admin
+import com.example.rireki.data.dataclass.ListSettings
 import com.example.rireki.data.dataclass.Profile
 import com.example.rireki.data.dataclass.ProfileList
 import com.example.rireki.data.dataclass.UserInformation
@@ -254,6 +256,44 @@ class UserViewModel(
         )
     }
 
+    fun changeAdminsOfList(
+        listId: String,
+        admin: String,
+        operation: String,
+    ) {
+        val list = uiState.value.userData.find {
+            it.id == listId
+        } ?: return
+
+        val updatedAdmins = when (operation) {
+            "add" -> list.settings.admins.plus(Admin(userId = admin))
+            "remove" -> list.settings.admins.minus(Admin(userId = admin))
+            else -> return
+        }
+
+        val updatedList = list.copy(
+            settings = ListSettings(
+                admins = updatedAdmins
+            )
+        )
+
+        val updatedLists = uiState.value.userData.map {
+            it.copy(
+                settings = if (it.id == listId) ListSettings(
+                    admins = updatedAdmins
+                ) else it.settings
+            )
+        }
+
+        updateListInDatabase(
+            db = db,
+            list = updatedList,
+            onComplete = {
+                this.updateUiLists(updatedLists)
+            }
+        )
+    }
+
     fun editUser(
         listId: String,
         profileName: String,
@@ -294,7 +334,7 @@ class UserViewModel(
     fun isUserAdmin(listId: String): Boolean {
         val list = uiState.value.userData.find { it.id == listId } ?: return false
 
-        return list.settings.admins.contains(auth.uid)
+        return list.settings.admins.find { it.userId == auth.uid } != null
     }
 
     fun getProfileFromListIdAndName(listId: String, profileName: String): Profile? {
